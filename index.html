@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vocación GO — El juego más importante: Tu Carrera</title>
+  <!-- Fuentes: intenta cargar desde Google Fonts, usa fallback del sistema si no hay internet -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" onerror="this.remove()">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div id="top-bar">
+  <span id="top-bar-title">VOCACIÓN GO</span>
+  <span id="screen-indicator">Pantalla 1 / 9</span>
+</div>
+
+<div id="app">
+
+  <!-- ==================== P1 LANDING ==================== -->
+  <div class="screen active" id="s1">
+    <nav class="navbar">
+      <div class="logo-wrap">
+        <div class="logo-ico">🎮</div>
+        <span class="logo-text">Vocación <span>GO</span></span>
+      </div>
+      <span class="badge badge-lime">v2.0</span>
+    </nav>
+    <div class="p1-hero-bg">
+      <div class="game-badge"><span class="pulse-dot"></span>TEST GRATUITO · 20 MINUTOS</div>
+      <h1 class="hero-title">VOCACIÓN <span class="go">GO</span></h1>
+      <p class="hero-slogan">El juego más importante: Tu Carrera</p>
+      <p class="hero-sub">Responde 56 preguntas y nuestro algoritmo te mostrará la carrera que mejor se adapta a ti.</p>
+      <div class="tag-row">
+        <span class="tag tag-univ">Universitaria</span>
+        <span class="tag tag-tec">Técnica</span>
+        <span class="tag tag-ffaa">Fuerzas Armadas</span>
+        <span class="tag tag-pol">Policial</span>
+      </div>
+      <div class="stats-row">
+        <div class="stat"><div class="stat-num">56</div><div class="stat-lbl">preguntas<br>validadas</div></div>
+        <div class="stat"><div class="stat-num">6</div><div class="stat-lbl">dimensiones<br>analizadas</div></div>
+        <div class="stat"><div class="stat-num">20'</div><div class="stat-lbl">tiempo<br>estimado</div></div>
+      </div>
+    </div>
+    <div class="p1-btns">
+      <button class="btn btn-lime" onclick="VocaApp.irA(2)">▶ DA START A TU FUTURO</button>
+      <button class="btn btn-secondary" onclick="abrirModalAdmin()">Ver panel de administrador</button>
+    </div>
+    <div class="p1-features">
+      <p class="feat-title">¿Qué incluye?</p>
+      <div class="feat-item"><div class="feat-ico" style="background:#EDE9FE">🧠</div>Test psicométrico basado en modelos Holland y Kuder</div>
+      <div class="feat-item"><div class="feat-ico" style="background:#D1FAE5">📊</div>Gráfico radar con tu perfil vocacional completo</div>
+      <div class="feat-item"><div class="feat-ico" style="background:#FEF3C7">🎓</div>Lista de carreras e instituciones recomendadas en Perú</div>
+      <div class="feat-item"><div class="feat-ico" style="background:#FCE7F3">📄</div>Resultado descargable para compartir</div>
+    </div>
+    <div class="p1-footer">Herramienta orientativa. No reemplaza la orientación vocacional profesional.<br>Protegido bajo Ley N° 29733 — Perú.</div>
+  </div>
+
+  <!-- ==================== P2 CONSENTIMIENTO ==================== -->
+  <div class="screen" id="s2">
+    <nav class="navbar">
+      <button class="back-btn" onclick="VocaApp.irA(1)">‹ Volver</button>
+      <span class="logo-text">Vocación <span>GO</span></span>
+      <span class="badge badge-gray">Paso 1 de 4</span>
+    </nav>
+    <div class="prog-bar"><div class="prog-fill" style="width:22%"></div></div>
+    <div class="screen-header">
+      <div class="header-icon" style="background:#EDE9FE">📋</div>
+      <h2 class="header-title">Antes de comenzar</h2>
+      <p class="header-sub">Lee con atención la siguiente información sobre cómo usaremos tus respuestas.</p>
+    </div>
+    <div class="info-cards">
+      <div class="info-card">
+        <div class="info-card-title">🎯 ¿Para qué sirve esta evaluación?</div>
+        <p>Este test analiza tus intereses y preferencias para orientarte hacia la carrera que mejor se adapta a tu perfil. No hay respuestas correctas ni incorrectas.</p>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">🔒 ¿Qué hacemos con tus datos?</div>
+        <p>Tus respuestas son confidenciales y se usan únicamente para generar tu perfil vocacional. No compartimos información personal con terceros.</p>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">⚠️ Limitaciones del sistema</div>
+        <p>Este resultado es orientativo y no reemplaza la orientación vocacional presencial con un profesional psicólogo.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="check-list">
+      <label class="check-item">
+        <input type="checkbox" id="c1" onchange="VocaApp.verificarConsentimiento({c1:this.checked, c2:document.getElementById('c2').checked, c3:document.getElementById('c3').checked})">
+        <span>He leído y entiendo el propósito de esta evaluación vocacional.</span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" id="c2" onchange="VocaApp.verificarConsentimiento({c1:document.getElementById('c1').checked, c2:this.checked, c3:document.getElementById('c3').checked})">
+        <span>Acepto que mis respuestas sean usadas de forma anónima para mejorar el sistema.</span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" id="c3" onchange="VocaApp.verificarConsentimiento({c1:document.getElementById('c1').checked, c2:document.getElementById('c2').checked, c3:this.checked})">
+        <span>Tengo entre 15 y 25 años y participo voluntariamente.</span>
+      </label>
+    </div>
+    <div class="screen-footer">
+      <button class="btn btn-primary disabled" id="btn-consent" onclick="if(!this.classList.contains('disabled')) VocaApp.irA(3)">Acepto y continúo ›</button>
+      <button class="btn btn-secondary" onclick="VocaApp.irA(1)">Volver al inicio</button>
+      <p class="law-note">Protección de datos según Ley N° 29733 — Perú</p>
+    </div>
+  </div>
+
+  <!-- ==================== P3 REGISTRO ==================== -->
+  <div class="screen" id="s3">
+    <nav class="navbar">
+      <button class="back-btn" onclick="VocaApp.irA(2)">‹ Volver</button>
+      <span class="logo-text">Vocación <span>GO</span></span>
+      <span class="badge badge-gray">Paso 2 de 4</span>
+    </nav>
+    <div class="prog-bar"><div class="prog-fill" style="width:44%"></div></div>
+    <div class="screen-header" style="text-align:left;padding:20px 18px 10px">
+      <div class="header-icon" style="background:#EDE9FE;margin:0 0 12px">👤</div>
+      <h2 class="header-title">Cuéntanos sobre ti</h2>
+      <p class="header-sub">Datos confidenciales para personalizar tu resultado.</p>
+    </div>
+    <div class="form-body">
+      <div class="field-row">
+        <div class="field">
+          <label>Nombre</label>
+          <input type="text" id="f-nombre" placeholder="Ej: Carlos" oninput="VocaApp.actualizarUsuario('nombre', this.value)">
+        </div>
+        <div class="field">
+          <label>Apellido</label>
+          <input type="text" id="f-apellido" placeholder="Ej: Quispe" oninput="VocaApp.actualizarUsuario('apellido', this.value)">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Edad</label>
+          <input type="number" id="f-edad" placeholder="16" min="15" max="25" oninput="VocaApp.actualizarUsuario('edad', this.value)">
+          <div class="field-hint">Entre 15 y 25 años</div>
+        </div>
+        <div class="field">
+          <label>Grado escolar</label>
+          <select id="f-grado" onchange="VocaApp.actualizarUsuario('grado', this.value)">
+            <option value="">Selecciona...</option>
+            <option>3° Secundaria</option>
+            <option>4° Secundaria</option>
+            <option>5° Secundaria</option>
+            <option>Egresado reciente</option>
+            <option>Otro</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Género</label>
+        <div class="gender-row">
+          <div class="gender-opt">
+            <input type="radio" name="gen" id="gm" value="M" onchange="VocaApp.actualizarUsuario('genero','M')">
+            <label for="gm"><span class="gico">👦</span>Masculino</label>
+          </div>
+          <div class="gender-opt">
+            <input type="radio" name="gen" id="gf" value="F" onchange="VocaApp.actualizarUsuario('genero','F')">
+            <label for="gf"><span class="gico">👧</span>Femenino</label>
+          </div>
+          <div class="gender-opt">
+            <input type="radio" name="gen" id="go" value="O" onchange="VocaApp.actualizarUsuario('genero','O')">
+            <label for="go"><span class="gico">🙂</span>Prefiero no decir</label>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Región</label>
+        <select id="f-region" onchange="VocaApp.actualizarUsuario('region', this.value)">
+          <option value="">Selecciona tu región...</option>
+          <option>Lima Metropolitana</option><option>Arequipa</option><option>La Libertad</option>
+          <option>Cusco</option><option>Piura</option><option>Lambayeque</option>
+          <option>Junín</option><option>Áncash</option><option>Ica</option>
+          <option>Cajamarca</option><option>Puno</option><option>Loreto</option>
+          <option>San Martín</option><option>Huánuco</option><option>Otra región</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Tipo de institución educativa</label>
+        <select id="f-inst" onchange="VocaApp.actualizarUsuario('institucion', this.value)">
+          <option value="">Selecciona...</option>
+          <option>Colegio nacional</option>
+          <option>Colegio privado</option>
+          <option>Instituto preuniversitario</option>
+          <option>Ya egresé</option>
+        </select>
+      </div>
+    </div>
+    <div class="privacy-note">
+      <span style="font-size:16px">🔒</span>
+      <span>Tu nombre solo se usa para personalizar tu reporte. No se publica ni comparte.</span>
+    </div>
+    <div class="screen-footer">
+      <button class="btn btn-primary disabled" id="btn-reg" onclick="if(!this.classList.contains('disabled')) VocaApp.irA(4)">Continuar al test ›</button>
+      <button class="btn btn-secondary" onclick="VocaApp.irA(2)">Volver</button>
+    </div>
+  </div>
+
+  <!-- ==================== P4 EVALUACIÓN ==================== -->
+  <div class="screen" id="s4">
+    <nav class="navbar">
+      <button class="back-btn" onclick="VocaApp.irA(3)">‹ Salir</button>
+      <span class="logo-text">Vocación <span>GO</span></span>
+      <span class="badge badge-gray">Paso 3 de 4</span>
+    </nav>
+    <div class="prog-wrap">
+      <div class="prog-top"><span>Progreso del test</span><span id="prog-txt">Pregunta 1 de 56</span></div>
+      <div class="prog-track"><div class="prog-track-fill" id="prog-fill" style="width:2%"></div></div>
+    </div>
+    <div id="dim-badge" class="dim-badge" style="background:#EDE9FE;color:#5B21B6">
+      <span id="dim-ico">🎓</span>
+      <span id="dim-name">Intereses Académicos</span>
+    </div>
+    <div class="q-card">
+      <div class="q-number" id="q-num">Pregunta 1</div>
+      <div class="q-text" id="q-text">Cargando pregunta...</div>
+    </div>
+    <div class="likert-wrap">
+      <div class="likert-labels">
+        <span>Totalmente en desacuerdo</span>
+        <span>Indiferente</span>
+        <span>Totalmente de acuerdo</span>
+      </div>
+      <!-- Las opciones Likert se generan dinámicamente por ui.js/_reconstruirLikert()
+           para garantizar que cada pregunta arranque sin estado previo -->
+      <div class="likert-opts" id="likert-opts"></div>
+    </div>
+    <div class="sel-msg" id="sel-msg">Selecciona una opción para continuar</div>
+    <div class="nav-row">
+      <button class="btn-prev" id="btn-prev" onclick="VocaApp.preguntaAnterior()">‹ Anterior</button>
+      <button class="btn-next" id="btn-next" onclick="VocaApp.siguientePregunta()">Siguiente ›</button>
+    </div>
+    <div class="dots-row" id="dots-row"></div>
+    <div class="tip-bar">💡 <span id="tip-text">No hay respuestas correctas ni incorrectas. Responde con sinceridad.</span></div>
+  </div>
+
+  <!-- ==================== P5 PROCESANDO ==================== -->
+  <div class="screen" id="s5">
+    <nav class="navbar">
+      <span class="logo-text">Vocación <span>GO</span></span>
+      <span class="badge badge-purple">Paso 4 de 4</span>
+    </nav>
+    <div class="p5-body">
+      <div class="orbit-wrap">
+        <div class="o-ring r1"></div>
+        <div class="o-ring r2"></div>
+        <div class="o-ring r3"></div>
+        <div class="o-center">🧠</div>
+      </div>
+      <h2 class="p5-title" id="p5-title">Analizando tu perfil...</h2>
+      <p class="p5-sub" id="p5-sub">Estamos procesando tus 56 respuestas para encontrar tu vocación ideal. ¡Ya casi!</p>
+      <div class="steps-list" id="steps5">
+        <div class="step-row" id="ss0"><div class="s-ico">📥</div><span class="s-label">Recopilando tus respuestas</span><span class="s-check">✓</span></div>
+        <div class="step-row" id="ss1"><div class="s-ico">⚖️</div><span class="s-label">Calculando puntajes por dimensión</span><span class="s-check">✓</span></div>
+        <div class="step-row" id="ss2"><div class="s-ico">📐</div><span class="s-label">Normalizando a escala 0–100</span><span class="s-check">✓</span></div>
+        <div class="step-row" id="ss3"><div class="s-ico">🔍</div><span class="s-label">Aplicando reglas de clasificación</span><span class="s-check">✓</span></div>
+        <div class="step-row" id="ss4"><div class="s-ico">🎓</div><span class="s-label">Identificando carreras recomendadas</span><span class="s-check">✓</span></div>
+        <div class="step-row" id="ss5"><div class="s-ico">📊</div><span class="s-label">Generando tu perfil vocacional</span><span class="s-check">✓</span></div>
+      </div>
+      <div class="ov-bar">
+        <div class="ov-label"><span>Progreso del análisis</span><span id="ov-pct">0%</span></div>
+        <div class="ov-track"><div class="ov-fill" id="ov-fill"></div></div>
+      </div>
+      <p class="fun-msg" id="fun-msg5">Procesando tus respuestas...</p>
+      <div class="ready-sec" id="ready5" style="display:none">
+        <div class="ready-badge">✓ ¡Tu perfil está listo!</div>
+        <button class="btn btn-primary" style="width:100%" onclick="VocaApp.irA(6)">Ver mis resultados ›</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== P6 RESULTADOS ==================== -->
+  <div class="screen" id="s6">
+    <nav class="navbar">
+      <span class="logo-text">Vocación <span>GO</span></span>
+      <span class="badge badge-green">✓ Completado</span>
+    </nav>
+    <div class="p6-hero">
+      <p class="p6-saludo" id="p6-saludo">¡Hola! Aquí están tus resultados</p>
+      <div class="result-cat" id="result-cat">🎓 Carrera Universitaria</div>
+      <div class="conf-row">
+        <span class="conf-dot"></span>
+        <span>Nivel de confianza:</span>
+        <span id="conf-label" style="color:#065F46;font-weight:600;margin-left:4px">Alto</span>
+      </div>
+    </div>
+    <div class="radar-wrap">
+      <canvas id="radar6" width="340" height="270"></canvas>
+    </div>
+    <div class="dims-grid" id="dims6"></div>
+    <p id="p6-mensaje" class="p6-mensaje"></p>
+    <p class="sec-title">Carreras recomendadas para ti</p>
+    <div class="carreras-list" id="carreras-resumen"></div>
+    <div class="warn-box">
+      <span style="font-size:18px;flex-shrink:0">⚠️</span>
+      <p>Este resultado es orientativo y no reemplaza la orientación vocacional presencial con un psicólogo.</p>
+    </div>
+    <div class="p6-actions">
+      <button class="btn btn-lime" onclick="VocaExport.descargarPDF()">📄 Descargar PDF</button>
+      <button class="btn btn-secondary" onclick="VocaApp.nuevaEvaluacion()">Nueva evaluación</button>
+    </div>
+  </div>
+
+  <!-- ==================== P7 CARRERAS ==================== -->
+  <div class="screen" id="s7">
+    <nav class="navbar">
+      <button class="back-btn" onclick="VocaApp.irA(6)">‹ Resultados</button>
+      <span class="logo-text">Vocación <span>GO</span></span>
+      <span class="badge badge-purple">Carreras</span>
+    </nav>
+    <div class="p7-header">
+      <div class="p7-header-top">
+        <div class="p7-header-ico">🎯</div>
+        <h2 class="p7-header-title">Carreras para ti</h2>
+      </div>
+      <p class="p7-header-sub">Basado en tu perfil, estas son las opciones más afines en el sistema educativo peruano.</p>
+    </div>
+    <div class="tabs-row">
+      <button class="tab-btn active" onclick="switchTab7('univ',this)">Universitarias</button>
+      <button class="tab-btn" onclick="switchTab7('tec',this)">Técnicas</button>
+      <button class="tab-btn" onclick="switchTab7('ffaa',this)">Fuerzas Armadas</button>
+      <button class="tab-btn" onclick="switchTab7('pol',this)">Policial</button>
+    </div>
+    <div class="tab-panel active" id="t7-univ" style="padding-bottom:8px"></div>
+    <div class="tab-panel" id="t7-tec"  style="padding-bottom:8px"></div>
+    <div class="tab-panel" id="t7-ffaa" style="padding-bottom:8px"></div>
+    <div class="tab-panel" id="t7-pol"  style="padding-bottom:8px"></div>
+    <div class="p7-footer">
+      <button class="btn btn-primary" onclick="VocaApp.irA(6)">‹ Volver a mis resultados</button>
+    </div>
+  </div>
+
+  <!-- ==================== P8 COMPARTIR ==================== -->
+  <div class="screen" id="s8">
+    <nav class="navbar">
+      <button class="back-btn" onclick="VocaApp.irA(6)">‹ Resultados</button>
+      <span class="logo-text">Vocación <span>GO</span></span>
+      <span class="badge badge-purple">Compartir</span>
+    </nav>
+    <div class="p8-header">
+      <div class="header-icon" style="background:#EDE9FE;margin:0 auto 12px">📤</div>
+      <h2 class="header-title">Comparte tu resultado</h2>
+      <p class="header-sub">Guarda o comparte tu perfil con tu familia, orientador o colegio.</p>
+    </div>
+    <div class="report-card">
+      <div class="report-top">
+        <div class="report-logo">VocaTest · Perfil Vocacional</div>
+        <div class="report-name" id="report-name">Nombre Apellido</div>
+        <div class="report-cat-badge">🎓 Carrera Universitaria</div>
+        <div class="report-conf-text" id="report-conf-text">Nivel de confianza: Alto</div>
+      </div>
+      <div class="report-body">
+        <div class="report-dims" id="rdims8"></div>
+        <div class="report-foot2">Basado en el modelo RIASEC (Holland) + Kuder · IOV-D v1.0</div>
+        <div class="report-date" id="rdate8"></div>
+      </div>
+    </div>
+    <p class="sec-title" style="padding:0 18px 8px">Opciones de exportación</p>
+    <div class="share-grid">
+      <div class="share-btn" onclick="VocaExport.descargarPDF()">
+        <div class="share-ico" style="background:#FEE2E2">📄</div>
+        <span class="share-lbl">Descargar PDF</span>
+        <span class="share-desc">Reporte completo para imprimir</span>
+      </div>
+      <div class="share-btn" onclick="VocaExport.descargarExcel()">
+        <div class="share-ico" style="background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3)">📊</div>
+        <span class="share-lbl">Exportar Excel</span>
+        <span class="share-desc">Respuestas + puntajes</span>
+      </div>
+      <div class="share-btn" onclick="VocaApp.simularDescarga('email')">
+        <div class="share-ico" style="background:#DBEAFE">📧</div>
+        <span class="share-lbl">Enviar por email</span>
+        <span class="share-desc">A tu orientador o familia</span>
+      </div>
+      <div class="share-btn" onclick="VocaApp.simularDescarga('whatsapp')">
+        <div class="share-ico" style="background:#D1FAE5">💬</div>
+        <span class="share-lbl">WhatsApp</span>
+        <span class="share-desc">Comparte con tu familia</span>
+      </div>
+    </div>
+    <p class="sec-title" style="padding:0 18px 8px">Enlace directo</p>
+    <div class="link-box">
+      <div class="link-top">
+        <span class="link-url-text" id="link-url-text">vocatest.local/resultado</span>
+        <button class="copy-btn" id="copy-btn" onclick="VocaApp.copiarEnlace(); this.textContent='¡Copiado!'; this.classList.add('copied'); setTimeout(()=>{this.textContent='Copiar';this.classList.remove('copied')},2500)">Copiar</button>
+      </div>
+    </div>
+    <div class="priv-row">
+      <span style="font-size:16px;flex-shrink:0">🔒</span>
+      <span>El enlace solo funciona en este navegador (Fase 1). En Fase 2 será un enlace compartible real.</span>
+    </div>
+    <div style="padding:0 18px 20px;display:flex;flex-direction:column;gap:8px">
+      <button class="btn btn-secondary" onclick="abrirModalAdmin()">Ver panel de administrador ›</button>
+      <button class="btn btn-secondary" onclick="VocaApp.irA(6)">‹ Volver a resultados</button>
+    </div>
+  </div>
+
+  <!-- ==================== P9 ADMIN ==================== -->
+  <div class="screen" id="s9">
+    <nav class="navbar">
+      <div class="logo-wrap">
+        <div class="logo-ico">V</div>
+        <span class="logo-text">Vocación <span>GO</span></span>
+      </div>
+      <span class="badge badge-amber">⚙️ Admin</span>
+    </nav>
+    <div class="tabs-nav">
+      <button class="tnav active" onclick="switchAdm('dashboard',this)">Dashboard</button>
+      <button class="tnav" onclick="switchAdm('evaluaciones',this)">Evaluaciones</button>
+      <button class="tnav" onclick="switchAdm('config',this)">Configuración</button>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="adm-panel active" id="adm-dashboard">
+      <div class="metrics-grid">
+        <div class="metric-card"><div class="metric-val" id="adm-total">0</div><div class="metric-lbl">Total evaluaciones</div></div>
+        <div class="metric-card"><div class="metric-val" id="adm-tiempo">0'</div><div class="metric-lbl">Tiempo promedio</div></div>
+        <div class="metric-card"><div class="metric-val" id="adm-completitud">0%</div><div class="metric-lbl">Tasa de completitud</div></div>
+        <div class="metric-card"><div class="metric-val" id="adm-regiones">0</div><div class="metric-lbl">Regiones activas</div></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-ttl">Evaluaciones por semana</div>
+        <canvas id="adm-bars-chart" height="120"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-ttl">Distribución por categoría</div>
+        <div class="donut-row">
+          <div class="donut-wrap">
+            <canvas id="adm-donut" width="100" height="100"></canvas>
+            <div class="donut-center"><span class="donut-pct" id="adm-total-donut">0</span><span class="donut-sub">total</span></div>
+          </div>
+          <div class="leg-list" id="adm-legend"></div>
+        </div>
+      </div>
+      <div style="padding-bottom:14px;display:flex;flex-direction:column;gap:8px">
+        <button class="btn btn-primary" onclick="VocaExport.descargarExcelAdmin()">📊 Exportar todo a Excel</button>
+        <button class="btn btn-secondary" onclick="VocaApp.irA(1)">‹ Ir al inicio</button>
+      </div>
+    </div>
+
+    <!-- Evaluaciones -->
+    <div class="adm-panel" id="adm-evaluaciones">
+      <div class="search-bar2">
+        <span style="font-size:14px;color:var(--text-3)">🔍</span>
+        <input type="text" placeholder="Buscar por nombre o región..." oninput="VocaApp.filtrarEvaluaciones(this.value, activeFilt)">
+      </div>
+      <div class="filter-row2">
+        <div class="filt active" onclick="setAdmFilt('todas',this)">Todas</div>
+        <div class="filt" onclick="setAdmFilt('UNIVERSITARIA',this)">Universitaria</div>
+        <div class="filt" onclick="setAdmFilt('TECNICA',this)">Técnica</div>
+        <div class="filt" onclick="setAdmFilt('FUERZAS_ARMADAS',this)">FFAA</div>
+        <div class="filt" onclick="setAdmFilt('POLICIAL',this)">Policial</div>
+        <div class="filt" onclick="setAdmFilt('INDETERMINADO',this)">Indeterminado</div>
+      </div>
+      <div class="eval-list2" id="eval-list9"></div>
+      <div class="pag-row">
+        <button class="pag-btn">‹</button>
+        <span class="pag-cur" id="pag-info">Mostrando todas</span>
+        <button class="pag-btn">›</button>
+      </div>
+    </div>
+
+    <!-- Configuración -->
+    <div class="adm-panel" id="adm-config">
+      <div class="cfg-sec">
+        <div class="cfg-ttl">Sistema de evaluación</div>
+        <div class="cfg-item">
+          <div><div class="cfg-lbl">Orden aleatorio de preguntas</div><div class="cfg-sub">Evita sesgo de respuesta</div></div>
+          <label class="toggle"><input type="checkbox" onchange="saveConfig('ordenAleatorio', this.checked)"><div class="tslider"></div></label>
+        </div>
+        <div class="cfg-item">
+          <div><div class="cfg-lbl">Avance automático</div><div class="cfg-sub">Pasa a la siguiente al seleccionar</div></div>
+          <label class="toggle"><input type="checkbox" onchange="saveConfig('avanceAutomatico', this.checked)"><div class="tslider"></div></label>
+        </div>
+        <div class="cfg-item">
+          <div><div class="cfg-lbl">Permitir retroceder</div><div class="cfg-sub">El evaluado puede cambiar respuestas</div></div>
+          <label class="toggle"><input type="checkbox" checked onchange="saveConfig('permitirRetroceder', this.checked)"><div class="tslider"></div></label>
+        </div>
+      </div>
+      <div class="cfg-sec">
+        <div class="cfg-ttl">Umbrales del algoritmo</div>
+        <div class="cfg-item"><div><div class="cfg-lbl">Umbral Universitaria (R-001)</div><div class="cfg-sub">DIM-01 ≥ 70 AND DIM-03 ≥ 60</div></div><span class="cfg-val">70 pts</span></div>
+        <div class="cfg-item"><div><div class="cfg-lbl">Umbral Técnica (R-002)</div><div class="cfg-sub">DIM-02 ≥ 70</div></div><span class="cfg-val">70 pts</span></div>
+        <div class="cfg-item"><div><div class="cfg-lbl">Umbral FFAA (R-003)</div><div class="cfg-sub">DIM-05 ≥ 70 AND DIM-06 ≥ 70</div></div><span class="cfg-val">70 pts</span></div>
+      </div>
+
+      <div class="cfg-sec">
+        <div class="cfg-ttl">Seguridad</div>
+        <div class="cfg-item" style="flex-direction:column;align-items:flex-start;gap:10px">
+          <div>
+            <div class="cfg-lbl">Clave de administrador</div>
+            <div class="cfg-sub">Cambia la clave de acceso al panel Admin</div>
+          </div>
+          <div style="display:flex;gap:8px;width:100%">
+            <input id="nueva-clave" type="password" placeholder="Nueva clave..."
+              style="flex:1;padding:10px 12px;background:var(--bg-input);border:1px solid var(--border);
+                border-radius:var(--radius);color:var(--text);font-size:13px;font-family:var(--font-body);outline:none"
+              onfocus="this.style.borderColor='var(--purple)'"
+              onblur="this.style.borderColor='var(--border)'"
+              onkeydown="if(event.key==='Enter') cambiarClaveAdmin()">
+            <button onclick="cambiarClaveAdmin()"
+              style="padding:10px 14px;background:linear-gradient(135deg,var(--purple),var(--blue));
+                color:#fff;border:none;border-radius:var(--radius);font-family:var(--font-display);
+                font-size:12px;font-weight:900;cursor:pointer;white-space:nowrap">
+              Guardar
+            </button>
+          </div>
+          <div id="cfg-clave-msg" style="font-size:11px;color:#44FF88;display:none">✓ Clave actualizada correctamente</div>
+        </div>
+      </div>
+      <button class="btn btn-danger" onclick="if(confirm('¿Limpiar todos los datos?')){DB.limpiarTodo();VocaUI.showToast('Datos eliminados');VocaApp.irA(1)}">Limpiar todos los datos</button>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<!-- ── MODAL CLAVE ADMIN ────────────────────────────────── -->
+<div id="modal-admin" style="display:none;position:fixed;inset:0;z-index:9000;
+  background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);
+  display:none;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#13132A;border:1px solid rgba(139,0,255,0.4);border-radius:20px;
+    padding:28px 24px;width:100%;max-width:340px;box-shadow:0 0 40px rgba(139,0,255,0.3)">
+
+    <!-- Ícono y título -->
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="width:52px;height:52px;border-radius:14px;
+        background:linear-gradient(135deg,#8B00FF,#00C8FF);
+        display:flex;align-items:center;justify-content:center;
+        font-size:24px;margin:0 auto 12px">🔐</div>
+      <div style="font-family:var(--font-display);font-size:18px;font-weight:900;color:#fff;margin-bottom:4px">
+        Panel de Administrador
+      </div>
+      <div style="font-size:12px;color:#6060A0">Ingresa la clave de acceso para continuar</div>
+    </div>
+
+    <!-- Campo de clave -->
+    <div style="position:relative;margin-bottom:14px">
+      <input id="admin-pwd-input" type="password" placeholder="Contraseña"
+        style="width:100%;padding:13px 44px 13px 14px;
+          background:#1E1E38;border:1px solid rgba(139,0,255,0.3);
+          border-radius:12px;color:#fff;font-size:15px;font-family:var(--font-body);
+          outline:none;transition:border-color .2s"
+        onfocus="this.style.borderColor='#8B00FF';this.style.boxShadow='0 0 0 3px rgba(139,0,255,0.15)'"
+        onblur="this.style.borderColor='rgba(139,0,255,0.3)';this.style.boxShadow='none'"
+        onkeydown="if(event.key==='Enter') verificarClaveAdmin()">
+      <!-- Ojo para mostrar/ocultar -->
+      <button onclick="togglePwdAdmin()" id="btn-eye-admin"
+        style="position:absolute;right:12px;top:50%;transform:translateY(-50%);
+          background:none;border:none;color:#6060A0;cursor:pointer;font-size:16px;
+          padding:4px;line-height:1">👁️</button>
+    </div>
+
+    <!-- Mensaje de error -->
+    <div id="admin-pwd-error"
+      style="display:none;font-size:12px;color:#FF4444;text-align:center;
+        margin-bottom:10px;padding:7px;background:rgba(255,68,68,0.1);
+        border-radius:8px;border:1px solid rgba(255,68,68,0.25)">
+      ⚠️ Clave incorrecta. Intenta nuevamente.
+    </div>
+
+    <!-- Botones -->
+    <button onclick="verificarClaveAdmin()"
+      style="width:100%;padding:14px;margin-bottom:8px;
+        background:linear-gradient(135deg,#8B00FF,#00C8FF);color:#fff;
+        border:none;border-radius:12px;font-family:var(--font-display);
+        font-size:14px;font-weight:900;cursor:pointer;letter-spacing:.02em">
+      Ingresar al Admin
+    </button>
+    <button onclick="cerrarModalAdmin()"
+      style="width:100%;padding:12px;background:transparent;color:#6060A0;
+        border:1px solid rgba(255,255,255,0.1);border-radius:12px;
+        font-family:var(--font-display);font-size:13px;font-weight:700;cursor:pointer">
+      Cancelar
+    </button>
+
+    <!-- Hint de clave -->
+    <div style="text-align:center;margin-top:14px;font-size:11px;color:#404060">
+      Clave por defecto: <span style="color:#8B00FF;font-weight:700">admin2025</span>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast-main"></div>
+
+<!-- SCRIPTS — orden importa: data → engine → storage → ui → app → export -->
+<script src="js/data.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/radar.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/app.js"></script>
+<script src="js/export.js"></script>
+<!-- Sin librerías CDN — todo funciona offline -->
+<!-- PDF y Excel generados por servidor Python local (servidor.py) -->
+
+<script>
+/* ============================================================
+   HELPERS GLOBALES DEL HTML
+   (funciones menores que conectan eventos HTML con app.js)
+============================================================ */
+
+// ── MODAL CLAVE ADMIN ──────────────────────────────────────
+
+// La clave se guarda como hash simple para no exponerla en texto plano
+// Hash FNV-1a de 32 bits — suficiente para una clave de acceso local
+function _hashStr(str) {
+  let hash = 0x811c9dc5;
+  for (let i = 0; i < str.length; i++) {
+    hash ^= str.charCodeAt(i);
+    hash = (hash * 0x01000193) >>> 0;
+  }
+  return hash.toString(16);
+}
+
+// Clave por defecto: admin2025 — el admin puede cambiarla desde Configuración
+const ADMIN_HASH_DEFAULT = _hashStr('admin2025');
+
+function abrirModalAdmin() {
+  const modal = document.getElementById('modal-admin');
+  if (!modal) return;
+  modal.style.display = 'flex';
+  // Limpiar estado anterior
+  const input = document.getElementById('admin-pwd-input');
+  if (input) { input.value = ''; input.type = 'password'; input.focus(); }
+  document.getElementById('admin-pwd-error').style.display = 'none';
+}
+
+function cerrarModalAdmin() {
+  const modal = document.getElementById('modal-admin');
+  if (modal) modal.style.display = 'none';
+}
+
+function verificarClaveAdmin() {
+  const input = document.getElementById('admin-pwd-input');
+  const errorEl = document.getElementById('admin-pwd-error');
+  if (!input) return;
+
+  const ingresada = input.value.trim();
+  if (!ingresada) { input.focus(); return; }
+
+  // Obtener hash guardado (o usar el default)
+  const config = DB.obtenerConfig();
+  const hashGuardado = config.adminHash || ADMIN_HASH_DEFAULT;
+
+  if (_hashStr(ingresada) === hashGuardado) {
+    cerrarModalAdmin();
+    VocaApp.irA(9);
+  } else {
+    errorEl.style.display = 'block';
+    input.value = '';
+    input.focus();
+    // Animación de shake
+    input.style.animation = 'none';
+    setTimeout(() => { input.style.animation = 'shakeInput .4s ease'; }, 10);
+    setTimeout(() => { input.style.animation = 'none'; }, 450);
+  }
+}
+
+function togglePwdAdmin() {
+  const input = document.getElementById('admin-pwd-input');
+  const btn   = document.getElementById('btn-eye-admin');
+  if (!input) return;
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = '🙈';
+  } else {
+    input.type = 'password';
+    btn.textContent = '👁️';
+  }
+}
+
+// Cerrar modal al hacer clic fuera
+document.getElementById('modal-admin')?.addEventListener('click', function(e) {
+  if (e.target === this) cerrarModalAdmin();
+});
+
+// Pantalla 6 — expandir ficha de carrera
+function toggleCarreraP6(detailId, cardId) {
+  const det = document.getElementById(detailId);
+  const arr = document.getElementById('arr-' + detailId);
+  if (!det) return;
+  const isOpen = det.style.display === 'block';
+  // Cerrar todos primero
+  document.querySelectorAll('.carrera-detalle').forEach(d => d.style.display = 'none');
+  document.querySelectorAll('.expand-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+  // Abrir este si estaba cerrado
+  if (!isOpen) {
+    det.style.display = 'block';
+    if (arr) arr.style.transform = 'rotate(180deg)';
+  }
+}
+
+// Pantalla 7 — tabs de carreras
+function switchTab7(id, el) {
+  document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('t7-' + id).classList.add('active');
+}
+
+// Pantalla 7 — expandir tarjeta de carrera
+function toggleCard7(card) {
+  const body = card.querySelector('.card-body');
+  const isOpen = body.classList.contains('open');
+  document.querySelectorAll('.card-body').forEach(b => b.classList.remove('open'));
+  if (!isOpen) body.classList.add('open');
+}
+
+// Pantalla 9 — cambiar clave del admin
+function cambiarClaveAdmin() {
+  const input = document.getElementById('nueva-clave');
+  const msg   = document.getElementById('cfg-clave-msg');
+  if (!input) return;
+
+  const nuevaClave = input.value.trim();
+  if (nuevaClave.length < 4) {
+    VocaUI.showToast('⚠️ La clave debe tener al menos 4 caracteres');
+    input.focus();
+    return;
+  }
+
+  const config = DB.obtenerConfig();
+  config.adminHash = _hashStr(nuevaClave);
+  DB.guardarConfig(config);
+
+  input.value = '';
+  msg.style.display = 'block';
+  setTimeout(() => { msg.style.display = 'none'; }, 3000);
+  VocaUI.showToast('✓ Clave de administrador actualizada');
+}
+
+// Pantalla 9 — tabs de admin
+function switchAdm(id, el) {
+  document.querySelectorAll('.tnav').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.adm-panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('adm-' + id).classList.add('active');
+}
+
+// Pantalla 9 — filtros de evaluaciones
+let activeFilt = 'todas';
+function setAdmFilt(f, el) {
+  activeFilt = f;
+  document.querySelectorAll('.filt').forEach(x => x.classList.remove('active'));
+  el.classList.add('active');
+  const search = document.querySelector('#adm-evaluaciones .search-bar2 input');
+  VocaApp.filtrarEvaluaciones(search?.value || '', f);
+}
+
+// Pantalla 9 — guardar configuración
+function saveConfig(clave, valor) {
+  const cfg = DB.obtenerConfig();
+  cfg[clave] = valor;
+  DB.guardarConfig(cfg);
+  VocaUI.showToast('Configuración guardada');
+}
+
+// Pantalla 7 — renderizar carreras dinámicamente según resultado
+function renderCarrerasPorCategoria() {
+  const r = VocaApp.getResultado();
+  if (!r) return;
+
+  const cats = { univ:'UNIVERSITARIA', tec:'TECNICA', ffaa:'FUERZAS_ARMADAS', pol:'POLICIAL' };
+
+  Object.entries(cats).forEach(([tab, cat]) => {
+    const panel = document.getElementById('t7-' + tab);
+    if (!panel) return;
+
+    const carreras = VocaData.getCatalogoPorCategoria(cat).map(c => {
+      const puntajesDims = c.dims.map(d => r.puntajesNorm[d] || 0);
+      const afinidad = Math.round(puntajesDims.reduce((a,b)=>a+b,0) / puntajesDims.length);
+      return { ...c, afinidad };
+    }).sort((a,b) => b.afinidad - a.afinidad);
+
+    if (!carreras.length) {
+      panel.innerHTML = `<div class="empty-state"><div class="empty-ico">💡</div><p>No hay opciones en esta categoría para tu perfil actual.</p></div>`;
+      return;
+    }
+
+    panel.innerHTML = carreras.map(c => `
+      <div class="carrera-card" onclick="toggleCard7(this)">
+        <div class="card-hdr">
+          <div class="card-hdr-ico">${c.icono}</div>
+          <div class="card-hdr-main">
+            <div class="card-hdr-name">${c.nombre}</div>
+            <div class="card-hdr-dur">${c.subcategoria} · ${c.duracion}</div>
+          </div>
+          <span class="card-match" style="background:rgba(200,255,0,0.15);color:#C8FF00;border:1px solid rgba(200,255,0,0.3)">${c.afinidad}% afín</span>
+        </div>
+        <div class="card-body">
+
+          ${c.descripcion ? `<p class="card-desc">${c.descripcion}</p>` : ''}
+
+          <div class="match-bar-wrap">
+            <div class="match-bar-lbl"><span>Afinidad con tu perfil</span><span style="color:var(--lime);font-weight:900">${c.afinidad}%</span></div>
+            <div class="match-track2"><div class="match-fill2" style="width:${c.afinidad}%;background:linear-gradient(90deg,var(--purple),var(--lime))"></div></div>
+          </div>
+
+          <div class="ficha-grid">
+            <div class="ficha-bloque" style="border-left:3px solid var(--blue)">
+              <div class="ficha-icono">🏢</div>
+              <div class="ficha-contenido">
+                <div class="campo-lbl">Campo laboral</div>
+                <div class="campo-tags">${(c.campoLaboral||[]).map(cl=>`<span class="campo-tag">${cl}</span>`).join('')}</div>
+              </div>
+            </div>
+
+            ${c.especializaciones ? `
+            <div class="ficha-bloque" style="border-left:3px solid var(--purple)">
+              <div class="ficha-icono">🎯</div>
+              <div class="ficha-contenido">
+                <div class="campo-lbl">Especializaciones</div>
+                <div class="campo-tags">${c.especializaciones.map(e=>`<span class="campo-tag" style="background:var(--purple-bg);color:var(--purple-mid)">${e}</span>`).join('')}</div>
+              </div>
+            </div>` : ''}
+
+            ${c.sueldoJunior ? `
+            <div class="ficha-bloque" style="border-left:3px solid #44FF88">
+              <div class="ficha-icono">💰</div>
+              <div class="ficha-contenido">
+                <div class="campo-lbl">Sueldo referencial</div>
+                <div class="sueldo-row"><span class="sueldo-lbl">Junior:</span><span class="sueldo-val">${c.sueldoJunior}</span></div>
+                <div class="sueldo-row"><span class="sueldo-lbl">Senior:</span><span class="sueldo-val sueldo-senior">${c.sueldoSenior}</span></div>
+              </div>
+            </div>` : ''}
+
+            <div class="ficha-bloque" style="border-left:3px solid var(--orange)">
+              <div class="ficha-icono">🎓</div>
+              <div class="ficha-contenido">
+                <div class="campo-lbl">Instituciones en Perú</div>
+                <div class="inst-list">${(c.instituciones||[]).map(i=>`<span class="inst-pill">${i}</span>`).join('')}</div>
+              </div>
+            </div>
+
+            ${c.costoNacional ? `
+            <div class="ficha-bloque" style="border-left:3px solid var(--pink)">
+              <div class="ficha-icono">💳</div>
+              <div class="ficha-contenido">
+                <div class="campo-lbl">Costos y financiamiento</div>
+                <div class="costo-row"><span class="costo-tipo">Nacional:</span> ${c.costoNacional}</div>
+                <div class="costo-row"><span class="costo-tipo">Privada:</span> ${c.costoPrivada}</div>
+              </div>
+            </div>` : ''}
+          </div>
+
+        </div>
+      </div>`).join('');
+  });
+}
+
+// Hook: renderizar carreras cuando se entra a P7
+const _origIrA = VocaApp.irA;
+
+// Inicializar la app al cargar
+window.addEventListener('DOMContentLoaded', () => {
+  VocaApp.init();
+});
+
+// Renderizar carreras cuando se navega a P7
+document.addEventListener('vocatest:pantallaActiva', (e) => {
+  if (e.detail === 7) renderCarrerasPorCategoria();
+});
+</script>
+
+</body>
+</html>
