@@ -325,99 +325,93 @@ const VocaUI = (() => {
     var container = document.getElementById('carreras-resumen');
     if (!container) return;
     if (!subcategorias || !subcategorias.length) {
-      container.innerHTML = '<p style="font-size:12px;color:var(--text-3);text-align:center;padding:12px">No hay carreras disponibles.</p>';
+      container.innerHTML = '<p style="font-size:12px;color:var(--text-3);text-align:center;padding:16px">No hay carreras disponibles.</p>';
       return;
     }
+
     var CAT_COLOR = {
       'UNIVERSITARIA':'#A855F7','UNIVERSITARIA_SOCIAL':'#A855F7',
       'UNIVERSITARIA_CIENCIAS':'#00C8FF','UNIVERSITARIA_TECNICA':'#A855F7',
       'TECNICA':'#22C55E','FUERZAS_ARMADAS':'#F59E0B','POLICIAL':'#EC4899',
       'MULTIPLE':'#6B7280','INDETERMINADO':'#6B7280','DEFAULT':'#6B7280'
     };
+
+    function makeTagPill(txt, tipo) {
+      var styles = {
+        campo: 'background:rgba(139,0,255,0.12);color:#A080D0;border:1px solid rgba(139,0,255,0.25)',
+        espec: 'background:rgba(0,200,255,0.1);color:#60A8C8;border:1px solid rgba(0,200,255,0.2)',
+        inst:  'background:rgba(255,200,0,0.1);color:#B09040;border:1px solid rgba(255,200,0,0.2)'
+      };
+      return '<span style="display:inline-block;font-size:10px;padding:3px 9px;border-radius:20px;margin:2px 3px 2px 0;font-weight:600;' + (styles[tipo]||styles.campo) + '">' + txt + '</span>';
+    }
+
+    function makeInfoBloque(label, items, tipo) {
+      if (!items || !items.length) return '';
+      return '<div style="margin-bottom:7px">' +
+        '<div style="font-size:9px;font-weight:900;color:#5050A0;text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px">' + label + '</div>' +
+        '<div style="display:flex;flex-wrap:wrap">' +
+          items.map(function(t){ return makeTagPill(t, tipo); }).join('') +
+        '</div>' +
+      '</div>';
+    }
+
     var html = '';
-    subcategorias.forEach(function(sc, idx) {
+    subcategorias.forEach(function(sc, scIdx) {
       var color = CAT_COLOR[sc.categoria] || '#A855F7';
-      var detailId = 'sc-detail-p6-' + idx;
-      var isFirst = idx === 0;
-      var carrerasHtml = (sc.carreras || []).map(function(c) {
-        return '<span style="font-size:11px;padding:3px 9px;background:rgba(255,255,255,0.06);color:var(--text-2);border-radius:6px;border:1px solid var(--border)">' + c + '</span>';
+      var bodyId = 'sc-body-' + scIdx;
+      var isFirst = scIdx === 0;
+      var numCarreras = (sc.carreras||[]).length;
+
+      // Carreras individuales dentro de la subcategoría
+      var carrerasHtml = (sc.carreras || []).map(function(car) {
+        return '<div style="border-top:1px solid rgba(255,255,255,0.05);background:#0F0F28">' +
+          '<div style="display:flex;align-items:center;gap:8px;padding:9px 13px 5px">' +
+            '<div style="width:28px;height:28px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;background:rgba(255,255,255,0.05)">' + (car.icono||'📌') + '</div>' +
+            '<span style="font-size:12px;font-weight:900;color:#fff">' + (car.nombre||'') + '</span>' +
+          '</div>' +
+          '<div style="padding:2px 13px 10px 49px">' +
+            (car.descripcion ? '<div style="font-size:11px;color:#7070A0;line-height:1.5;margin-bottom:7px">' + car.descripcion + '</div>' : '') +
+            makeInfoBloque('Campo laboral', car.campoLaboral, 'campo') +
+            makeInfoBloque('Especializaciones', car.especializaciones, 'espec') +
+            makeInfoBloque('Instituciones de referencia (Perú)', car.instituciones, 'inst') +
+          '</div>' +
+        '</div>';
       }).join('');
-      var sueldoHtml = sc.sueldoJunior
-        ? '<div style="font-size:11px;color:var(--text-2);margin-bottom:8px">Junior: <span style="color:#44FF88;font-weight:700">' + sc.sueldoJunior + '</span></div>'
-        : '';
-      html += '<div style="border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;margin-bottom:8px">';
-      html += '<div onclick="toggleSubcatP6(\'' + detailId + '\',this)" style="display:flex;align-items:center;gap:8px;padding:10px 13px;background:rgba(255,255,255,0.04);cursor:pointer">';
-      html += '<span style="font-size:18px">' + (sc.icono||'') + '</span>';
-      html += '<div style="flex:1;min-width:0">';
-      html += '<div style="font-family:var(--font-display);font-size:13px;font-weight:900;color:' + color + '">' + (sc.subcategoria||'') + '</div>';
-      html += '<div style="font-size:10px;color:var(--text-3)">' + (sc.carreras||[]).length + ' carrera(s) \xb7 Afinidad ' + sc.afinidad + '%</div>';
-      html += '</div>';
-      html += '<span style="font-family:var(--font-display);font-size:12px;font-weight:900;color:var(--lime)">' + sc.afinidad + '%</span>';
-      html += '<span class="subcat-caret" style="font-size:10px;color:var(--text-3);margin-left:4px">' + (isFirst ? '\u25b2' : '\u25bc') + '</span>';
-      html += '</div>';
-      html += '<div id="' + detailId + '" style="display:' + (isFirst ? 'block' : 'none') + ';padding:10px 13px;border-top:1px solid rgba(255,255,255,0.06);background:var(--bg-card2)">';
-      html += '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px">' + carrerasHtml + '</div>';
-      html += sueldoHtml;
-      html += '<button onclick="VocaApp.irA(7)" style="width:100%;padding:9px;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;border:none;border-radius:var(--radius);font-family:var(--font-display);font-size:12px;font-weight:900;cursor:pointer">Ver detalle \u203a</button>';
-      html += '</div></div>';
+
+      html +=
+        '<div style="margin-bottom:10px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.08)">' +
+
+          // Header subcategoría (clickeable)
+          '<div onclick="toggleScP6(\'' + bodyId + '\',this)" style="padding:10px 13px;cursor:pointer;background:rgba(255,255,255,0.03)">' +
+            '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px">' +
+              '<span style="font-size:13px;font-weight:900;color:' + color + '">' + (sc.icono||'') + ' ' + (sc.subcategoria||'') + '</span>' +
+              '<div style="display:flex;align-items:center;gap:6px">' +
+                '<span style="font-size:10px;color:#6060A0;background:rgba(255,255,255,0.06);padding:2px 7px;border-radius:10px">' + numCarreras + ' carrera' + (numCarreras !== 1 ? 's' : '') + '</span>' +
+                '<span class="sc-caret-p6" style="font-size:10px;color:#6060A0;transition:transform .2s;display:inline-block;transform:' + (isFirst ? 'rotate(180deg)' : 'rotate(0deg)') + '">\u25bc</span>' +
+              '</div>' +
+            '</div>' +
+            '<div style="display:flex;justify-content:space-between">' +
+              '<span style="font-size:11px;color:#7060A0">' + (sc.duracion||'') + '</span>' +
+              '<span style="font-size:12px;font-weight:900;color:#C8FF00">' + sc.afinidad + '% de afinidad</span>' +
+            '</div>' +
+          '</div>' +
+
+          // Cuerpo expandible
+          '<div id="' + bodyId + '" style="display:' + (isFirst ? 'block' : 'none') + '">' +
+            carrerasHtml +
+          '</div>' +
+        '</div>';
     });
+
     container.innerHTML = html;
   }
 
+
   function _renderRadar(puntajesNorm) {
-    const canvas = document.getElementById('radar6');
-    if (!canvas || typeof Chart === 'undefined') return;
-
-    // Destruir chart previo si existe
-    const prevChart = Chart.getChart(canvas);
-    if (prevChart) prevChart.destroy();
-
     const dims = VocaData.getDimensiones();
-    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const gridColor = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)';
-    const labelColor = isDark ? '#9CA3AF' : '#6B7280';
-
-    new Chart(canvas, {
-      type: 'radar',
-      data: {
-        labels: dims.map(d => d.icono + ' ' + d.nombreCorto),
-        datasets: [{
-          label: 'Tu perfil',
-          data: dims.map(d => puntajesNorm[d.id] || 0),
-          backgroundColor: 'rgba(124,58,237,0.15)',
-          borderColor: '#7C3AED',
-          borderWidth: 2,
-          pointBackgroundColor: dims.map(d => d.color),
-          pointBorderColor: '#fff',
-          pointBorderWidth: 2,
-          pointRadius: 5,
-          pointHoverRadius: 7
-        }]
-      },
-      options: {
-        responsive: true,
-        animation: { duration: 1100, easing: 'easeInOutQuart' },
-        scales: {
-          r: {
-            min: 0, max: 100,
-            ticks: { stepSize: 20, display: false },
-            grid: { color: gridColor, lineWidth: 0.8 },
-            angleLines: { color: gridColor, lineWidth: 0.8 },
-            pointLabels: {
-              font: { size: 11, family: "'Plus Jakarta Sans', sans-serif" },
-              color: labelColor
-            }
-          }
-        },
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            callbacks: { label: ctx => ` Puntaje: ${ctx.raw} / 100` }
-          }
-        }
-      }
-    });
+    VocaRadar.dibujar('radar6', puntajesNorm, dims);
   }
+
 
   function _renderDimsCards(nivelesDims) {
     const container = document.getElementById('dims6');
@@ -439,23 +433,7 @@ const VocaUI = (() => {
     });
   }
 
-  function _renderCarrerasResumen(carreras) {
-    const container = document.getElementById('carreras-resumen');
-    if (!container) return;
-
-    container.innerHTML = '';
-    carreras.slice(0, 3).forEach(c => {
-      container.innerHTML += `
-        <div class="carrera-item" onclick="VocaApp.irA(7)">
-          <div class="carrera-ico" style="background:#EDE9FE">${c.icono}</div>
-          <div class="carrera-info">
-            <div class="carrera-name">${c.nombre}</div>
-            <div class="carrera-inst">${c.instituciones.slice(0, 4).join(' · ')}</div>
-          </div>
-          <div class="carrera-dur">${c.duracion} ›</div>
-        </div>`;
-    });
-  }
+  // _renderCarrerasResumen definida arriba (nueva versión por subcategorías)
 
   /* ============================================================
      PANTALLA 8 — COMPARTIR
@@ -515,83 +493,112 @@ const VocaUI = (() => {
   }
 
   function _renderGraficaBarras(evaluaciones) {
-    const canvas = document.getElementById('adm-bars-chart');
-    if (!canvas || typeof Chart === 'undefined') return;
-
-    const prevChart = Chart.getChart(canvas);
-    if (prevChart) prevChart.destroy();
-
-    // Agrupar por semana (últimas 6)
+    const cont = document.getElementById('adm-bars-chart');
+    if (!cont) return;
     const semanas = _agruparPorSemana(evaluaciones, 6);
-
-    new Chart(canvas, {
-      type: 'bar',
-      data: {
-        labels: semanas.map(s => s.label),
-        datasets: [{
-          data: semanas.map(s => s.count),
-          backgroundColor: '#7C3AED',
-          borderRadius: 4,
-          borderSkipped: false
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: { legend: { display: false } },
-        scales: {
-          y: { beginAtZero: true, ticks: { stepSize: 1 } },
-          x: { grid: { display: false } }
-        }
-      }
+    const max = Math.max(...semanas.map(s => s.count), 1);
+    const H = 110, barW = 28, gap = 12, padL = 28, padB = 22;
+    const totalW = semanas.length * (barW + gap) - gap + padL + 16;
+    const ns = 'http://www.w3.org/2000/svg';
+    let old = cont.querySelector('svg');
+    if (old) old.remove();
+    const svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('viewBox', '0 0 ' + totalW + ' ' + (H + padB));
+    svg.setAttribute('width', '100%');
+    [0, 0.5, 1].forEach(frac => {
+      const y = H - frac * H;
+      const line = document.createElementNS(ns, 'line');
+      line.setAttribute('x1', padL); line.setAttribute('x2', totalW - 8);
+      line.setAttribute('y1', y); line.setAttribute('y2', y);
+      line.setAttribute('stroke', 'rgba(255,255,255,0.08)'); line.setAttribute('stroke-width', '1');
+      svg.appendChild(line);
+      const t = document.createElementNS(ns, 'text');
+      t.setAttribute('x', padL - 4); t.setAttribute('y', y + 4);
+      t.setAttribute('text-anchor', 'end'); t.setAttribute('fill', 'rgba(255,255,255,0.35)');
+      t.setAttribute('font-size', '8'); t.setAttribute('font-family', 'Nunito,sans-serif');
+      t.textContent = Math.round(frac * max);
+      svg.appendChild(t);
     });
+    semanas.forEach((s, i) => {
+      const x = padL + i * (barW + gap);
+      const bH = max > 0 ? Math.max(2, (s.count / max) * H) : 2;
+      const by = H - bH;
+      const rect = document.createElementNS(ns, 'rect');
+      rect.setAttribute('x', x); rect.setAttribute('y', by);
+      rect.setAttribute('width', barW); rect.setAttribute('height', bH);
+      rect.setAttribute('rx', '4'); rect.setAttribute('fill', '#8B00FF');
+      svg.appendChild(rect);
+      const val = document.createElementNS(ns, 'text');
+      val.setAttribute('x', x + barW/2); val.setAttribute('y', by - 4);
+      val.setAttribute('text-anchor', 'middle'); val.setAttribute('fill', '#C8FF00');
+      val.setAttribute('font-size', '9'); val.setAttribute('font-weight', '700');
+      val.setAttribute('font-family', 'Nunito,sans-serif');
+      val.textContent = s.count;
+      svg.appendChild(val);
+      const lbl = document.createElementNS(ns, 'text');
+      lbl.setAttribute('x', x + barW/2); lbl.setAttribute('y', H + 14);
+      lbl.setAttribute('text-anchor', 'middle'); lbl.setAttribute('fill', 'rgba(255,255,255,0.4)');
+      lbl.setAttribute('font-size', '8'); lbl.setAttribute('font-family', 'Nunito,sans-serif');
+      lbl.textContent = s.label;
+      svg.appendChild(lbl);
+    });
+    cont.innerHTML = '';
+    cont.appendChild(svg);
   }
+
 
   function _renderGraficaDonut(porCategoria) {
-    const canvas = document.getElementById('adm-donut');
-    if (!canvas || typeof Chart === 'undefined') return;
-
-    const prevChart = Chart.getChart(canvas);
-    if (prevChart) prevChart.destroy();
-
-    const etiquetas = VocaData.getEtiquetaCategoria;
-    const cats = Object.entries(porCategoria).map(([cat, count]) => ({
-      label: VocaData.getEtiquetaCategoria(cat).label,
-      count,
-      color: VocaData.getEtiquetaCategoria(cat).color
-    }));
-
-    // Leyenda
+    const cont = document.getElementById('adm-donut');
+    if (!cont) return;
+    const cats = Object.entries(porCategoria).map(([cat, count]) => {
+      const etq = VocaData.getEtiquetaCategoria(cat);
+      return { label: etq.label, count, color: etq.color };
+    }).filter(c => c.count > 0);
+    const total = cats.reduce((s, c) => s + c.count, 0);
     const legend = document.getElementById('adm-legend');
     if (legend) {
-      legend.innerHTML = cats.map(c => `
-        <div class="leg-item">
-          <div class="leg-dot" style="background:${c.color}"></div>
-          ${c.label}
-          <span class="leg-pct">${c.count}</span>
-        </div>`).join('');
+      legend.innerHTML = cats.map(c =>
+        '<div class="leg-item"><div class="leg-dot" style="background:' + c.color + '"></div>' +
+        '<span style="flex:1;font-size:11px">' + c.label + '</span>' +
+        '<span class="leg-pct">' + c.count + '</span></div>'
+      ).join('');
     }
-
-    new Chart(canvas, {
-      type: 'doughnut',
-      data: {
-        labels: cats.map(c => c.label),
-        datasets: [{
-          data: cats.map(c => c.count),
-          backgroundColor: cats.map(c => c.color),
-          borderWidth: 0,
-          hoverOffset: 4
-        }]
-      },
-      options: {
-        cutout: '72%',
-        animation: { duration: 900 },
-        plugins: {
-          legend: { display: false },
-          tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw}` } }
-        }
-      }
+    _setText('adm-total-donut', total);
+    if (!total) { cont.innerHTML = ''; return; }
+    const ns = 'http://www.w3.org/2000/svg';
+    const SZ = 100, CX = 50, CY = 50, R = 40, r = 28;
+    let old = cont.querySelector('svg');
+    if (old) old.remove();
+    const svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('viewBox', '0 0 ' + SZ + ' ' + SZ);
+    svg.setAttribute('width', '100%');
+    let startAngle = -Math.PI / 2;
+    cats.forEach(cat => {
+      const frac = cat.count / total;
+      const endAngle = startAngle + frac * Math.PI * 2;
+      const x1 = CX + R * Math.cos(startAngle), y1 = CY + R * Math.sin(startAngle);
+      const x2 = CX + R * Math.cos(endAngle),   y2 = CY + R * Math.sin(endAngle);
+      const xi1 = CX + r * Math.cos(endAngle),  yi1 = CY + r * Math.sin(endAngle);
+      const xi2 = CX + r * Math.cos(startAngle),yi2 = CY + r * Math.sin(startAngle);
+      const large = frac > 0.5 ? 1 : 0;
+      const path = document.createElementNS(ns, 'path');
+      path.setAttribute('d',
+        'M' + x1.toFixed(2) + ',' + y1.toFixed(2) +
+        ' A' + R + ',' + R + ' 0 ' + large + ',1 ' + x2.toFixed(2) + ',' + y2.toFixed(2) +
+        ' L' + xi1.toFixed(2) + ',' + yi1.toFixed(2) +
+        ' A' + r + ',' + r + ' 0 ' + large + ',0 ' + xi2.toFixed(2) + ',' + yi2.toFixed(2) + ' Z');
+      path.setAttribute('fill', cat.color);
+      const title = document.createElementNS(ns, 'title');
+      title.textContent = cat.label + ': ' + cat.count;
+      path.appendChild(title);
+      svg.appendChild(path);
+      startAngle = endAngle;
     });
+    cont.innerHTML = '';
+    cont.appendChild(svg);
   }
+
+
 
   function renderListaEvaluaciones(evaluaciones) {
     const container = document.getElementById('eval-list9');

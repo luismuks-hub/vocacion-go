@@ -27,8 +27,26 @@ if not IS_RENDER:
 
 # ── Helpers ──────────────────────────────────────────────────
 def limpiar(texto):
+    """Convierte texto a ASCII para Helvetica en reportlab.
+    Reemplaza tildes y ñ por equivalentes ASCII en lugar de eliminarlos."""
     if not texto: return ''
-    return ''.join(c for c in str(texto) if ord(c) < 128)
+    REEMPLAZOS = {
+        'a\u0301':'a','e\u0301':'e','i\u0301':'i','o\u0301':'o','u\u0301':'u',
+        '\u00e1':'a','\u00e9':'e','\u00ed':'i','\u00f3':'o','\u00fa':'u',
+        '\u00c1':'A','\u00c9':'E','\u00cd':'I','\u00d3':'O','\u00da':'U',
+        '\u00f1':'n','\u00d1':'N','\u00fc':'u','\u00dc':'U',
+        '\u00e0':'a','\u00e8':'e','\u00ec':'i','\u00f2':'o','\u00f9':'u',
+        '\u2013':'-','\u2014':'-','\u2018':"'",'\u2019':"'",
+        '\u201c':'"','\u201d':'"','\u2026':'...','\u00b7':'.',
+        '\u00ba':'o','\u00aa':'a','\u00bf':'?','\u00a1':'!',
+    }
+    resultado = []
+    for c in str(texto):
+        if c in REEMPLAZOS:
+            resultado.append(REEMPLAZOS[c])
+        elif ord(c) < 128:
+            resultado.append(c)
+    return ''.join(resultado)
 
 def truncar(texto, n):
     t = limpiar(texto)
@@ -132,7 +150,7 @@ def generar_pdf(datos):
         c.setFillColor(GL); c.setFont('Helvetica-Oblique',8)
         c.drawCentredString(W/2,y-8*mm,msg); y -= 22*mm
 
-    # Subcategorías/carreras
+    # Subcategorías con carreras individuales
     c.setFillColor(BL); c.setFont('Helvetica-Bold',10)
     c.drawString(18*mm,y,'CARRERAS RECOMENDADAS')
     y -= 4*mm
@@ -140,52 +158,119 @@ def generar_pdf(datos):
     y -= 7*mm
 
     pag = 1
+
+    def nueva_pagina_pdf():
+        nonlocal y, pag
+        c.setFillColor(BG); c.rect(0,0,W,10*mm,fill=1,stroke=0)
+        c.setFillColor(GD); c.setFont('Helvetica',6)
+        c.drawString(18*mm,4*mm,'Vocacion GO | Resultado orientativo. No reemplaza orientacion vocacional presencial.')
+        c.drawRightString(W-18*mm,4*mm,f'Pag. {pag}')
+        c.setFillColor(PU); c.rect(0,0,W,2*mm,fill=1,stroke=0)
+        c.showPage()
+        c.setFillColor(BG); c.rect(0,0,W,H,fill=1,stroke=0)
+        c.setFillColor(HexColor('#150830')); c.rect(0,H-14*mm,W,14*mm,fill=1,stroke=0)
+        c.setFillColor(LI); c.setFont('Helvetica-Bold',8)
+        c.drawString(18*mm,H-9*mm,'VOCACION GO - Carreras recomendadas (continuacion)')
+        c.setFillColor(PU); c.rect(0,H-14*mm,W,1.5*mm,fill=1,stroke=0)
+        y = H-22*mm; pag += 1
+
     for sc in carreras[:6]:
-        bloque = 36*mm
-        if y < 20*mm + bloque:
-            c.setFillColor(BG); c.rect(0,0,W,10*mm,fill=1,stroke=0)
-            c.setFillColor(GD); c.setFont('Helvetica',6)
-            c.drawString(18*mm,4*mm,'Vocacion GO | Resultado orientativo.')
-            c.drawRightString(W-18*mm,4*mm,f'Pag. {pag}')
-            c.setFillColor(PU); c.rect(0,0,W,2*mm,fill=1,stroke=0)
-            c.showPage()
-            c.setFillColor(BG); c.rect(0,0,W,H,fill=1,stroke=0)
-            c.setFillColor(HexColor('#150830')); c.rect(0,H-18*mm,W,18*mm,fill=1,stroke=0)
-            c.setFillColor(LI); c.setFont('Helvetica-Bold',9)
-            c.drawString(18*mm,H-11*mm,'VOCACION GO - continuacion')
-            y = H-28*mm; pag += 1
+        if y < 30*mm: nueva_pagina_pdf()
+        ac = CAT_C.get(sc.get('categoria',''), GM)
 
-        ac = CAT_C.get(sc.get('categoria',''),GM)
-        c.setFillColor(ac); c.rect(18*mm,y-bloque,2*mm,bloque,fill=1,stroke=0)
-        # Subcategoría
-        subcat = truncar(sc.get('subcategoria',''),50)
-        c.setFillColor(ac); c.setFont('Helvetica-Bold',10)
-        c.drawString(22*mm,y-7*mm,subcat)
+        # ── Header de subcategoría ──
+        c.setFillColor(HexColor('#1A1030'))
+        c.roundRect(18*mm, y-8*mm, W-36*mm, 8*mm, 2*mm, fill=1, stroke=0)
+        c.setFillColor(ac); c.setFont('Helvetica-Bold',9)
+        subcat = truncar(sc.get('subcategoria',''), 45)
+        c.drawString(20*mm, y-5.5*mm, subcat)
         c.setFillColor(LI); c.setFont('Helvetica-Bold',9)
-        c.drawRightString(W-18*mm,y-7*mm,f"{sc.get('afinidad',0)}% afin")
-        # Carreras de la subcategoría
-        car_list = sc.get('carreras',[])
-        if car_list:
-            c.setFillColor(GL); c.setFont('Helvetica',7.5)
-            c.drawString(22*mm,y-14*mm,(' / '.join(car_list))[:90])
-        # Sueldo
-        sj = limpiar(sc.get('sueldoJunior',''))
-        if sj:
-            c.setFillColor(GM); c.setFont('Helvetica-Bold',7)
-            c.drawString(22*mm,y-22*mm,'Junior:')
-            c.setFillColor(GR); c.setFont('Helvetica',7)
-            c.drawString(38*mm,y-22*mm,sj)
-        # Instituciones
-        insts = [limpiar(i) for i in sc.get('instituciones',[]) if limpiar(i)]
-        if insts:
-            c.setFillColor(GM); c.setFont('Helvetica-Bold',7)
-            c.drawString(22*mm,y-29*mm,'Instituciones:')
-            c.setFillColor(WH); c.setFont('Helvetica',7)
-            c.drawString(44*mm,y-29*mm,(' / '.join(insts[:4]))[:60])
+        c.drawRightString(W-20*mm, y-5.5*mm, f"{sc.get('afinidad',0)}% afin | {limpiar(sc.get('duracion',''))}")
+        y -= 10*mm
 
+        # ── Carreras individuales ──
+        car_items = sc.get('carreras', [])
+        # Si carreras es lista de strings (legado), convertir
+        if car_items and isinstance(car_items[0], str):
+            car_items = [{'nombre': n, 'icono': '', 'descripcion': '', 'campoLaboral': [], 'especializaciones': [], 'instituciones': sc.get('instituciones',[])} for n in car_items]
+
+        for car in car_items:
+            car_nombre = truncar(car.get('nombre',''), 55)
+            car_desc   = truncar(car.get('descripcion',''), 200)
+            campos     = [limpiar(x) for x in car.get('campoLaboral',[]) if limpiar(x)]
+            especs     = [limpiar(x) for x in car.get('especializaciones',[]) if limpiar(x)]
+            insts      = [limpiar(x) for x in car.get('instituciones',[]) if limpiar(x)]
+
+            # Calcular altura del bloque
+            altura = 7*mm  # nombre
+            if car_desc: altura += 7*mm
+            if campos:   altura += 5*mm
+            if especs:   altura += 5*mm
+            if insts:    altura += 5*mm
+            altura += 3*mm  # padding inferior
+
+            if y < 20*mm + altura: nueva_pagina_pdf()
+
+            # Bullet y nombre de la carrera
+            c.setFillColor(ac)
+            c.circle(20*mm, y-3*mm, 1.5*mm, fill=1, stroke=0)
+            c.setFont('Helvetica-Bold',9)
+            c.drawString(23*mm, y-3*mm, car_nombre)
+            y -= 7*mm
+
+            # Descripción (puede ser larga — dividir en líneas de ~85 chars)
+            if car_desc:
+                c.setFillColor(GM); c.setFont('Helvetica-Oblique',7.5)
+                # Dividir en líneas de 85 caracteres máximo
+                palabras = car_desc.split()
+                lineas_desc = []
+                linea_actual = ''
+                for palabra in palabras:
+                    prueba = (linea_actual + ' ' + palabra).strip()
+                    if len(prueba) <= 90:
+                        linea_actual = prueba
+                    else:
+                        if linea_actual:
+                            lineas_desc.append(linea_actual)
+                        linea_actual = palabra
+                if linea_actual:
+                    lineas_desc.append(linea_actual)
+                for linea in lineas_desc[:3]:  # máximo 3 líneas
+                    if y < 25*mm: nueva_pagina_pdf()
+                    c.drawString(24*mm, y-2*mm, linea)
+                    y -= 4.5*mm
+                y -= 1.5*mm
+
+            # Campo laboral
+            if campos:
+                c.setFillColor(HexColor('#5050A0')); c.setFont('Helvetica-Bold',7)
+                c.drawString(24*mm, y-2*mm, 'Campo laboral:')
+                c.setFillColor(GL); c.setFont('Helvetica',7)
+                c.drawString(50*mm, y-2*mm, (', '.join(campos[:4]))[:70])
+                y -= 5*mm
+
+            # Especializaciones
+            if especs:
+                c.setFillColor(HexColor('#30607A')); c.setFont('Helvetica-Bold',7)
+                c.drawString(24*mm, y-2*mm, 'Especializaciones:')
+                c.setFillColor(GL); c.setFont('Helvetica',7)
+                c.drawString(54*mm, y-2*mm, (', '.join(especs[:4]))[:65])
+                y -= 5*mm
+
+            # Instituciones
+            if insts:
+                c.setFillColor(HexColor('#706030')); c.setFont('Helvetica-Bold',7)
+                c.drawString(24*mm, y-2*mm, 'Instituciones:')
+                c.setFillColor(GL); c.setFont('Helvetica',7)
+                c.drawString(47*mm, y-2*mm, (', '.join(insts[:4]))[:70])
+                y -= 5*mm
+
+            y -= 3*mm  # espacio entre carreras
+
+        # Separador entre subcategorías
         c.setStrokeColor(GD); c.setLineWidth(0.2)
-        c.line(18*mm,y-bloque,W-18*mm,y-bloque)
-        y -= bloque + 3*mm
+        c.line(18*mm, y, W-18*mm, y)
+        y -= 5*mm
 
     # Pie última página
     c.setFillColor(BG); c.rect(0,0,W,10*mm,fill=1,stroke=0)

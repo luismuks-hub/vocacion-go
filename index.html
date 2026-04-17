@@ -514,9 +514,8 @@
 </div><!-- /app -->
 
 <!-- ── MODAL CLAVE ADMIN ────────────────────────────────── -->
-<div id="modal-admin" style="display:none;position:fixed;inset:0;z-index:9000;
-  background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);
-  display:none;align-items:center;justify-content:center;padding:20px">
+<div id="modal-admin" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;
+  background:rgba(0,0,0,0.80);align-items:center;justify-content:center;padding:20px">
   <div style="background:#13132A;border:1px solid rgba(139,0,255,0.4);border-radius:20px;
     padding:28px 24px;width:100%;max-width:340px;box-shadow:0 0 40px rgba(139,0,255,0.3)">
 
@@ -673,20 +672,16 @@ document.getElementById('modal-admin')?.addEventListener('click', function(e) {
   if (e.target === this) cerrarModalAdmin();
 });
 
-// Pantalla 6 — expandir subcategoría
-function toggleSubcatP6(detailId, hdrEl) {
-  const det = document.getElementById(detailId);
-  const caret = hdrEl ? hdrEl.querySelector('.subcat-caret') : null;
-  if (!det) return;
-  const isOpen = det.style.display === 'block';
-  // Cerrar todos
-  document.querySelectorAll('[id^="sc-detail-p6-"]').forEach(d => d.style.display = 'none');
-  document.querySelectorAll('.subcat-caret').forEach(c => c.textContent = '▼');
-  // Abrir este si estaba cerrado
-  if (!isOpen) {
-    det.style.display = 'block';
-    if (caret) caret.textContent = '▲';
-  }
+// Pantalla 6 — expandir/contraer subcategoría
+function toggleScP6(bodyId, hdrEl) {
+  var body = document.getElementById(bodyId);
+  if (!body) return;
+  // getComputedStyle para leer el estado real (no solo el inline style)
+  var isOpen = window.getComputedStyle(body).display !== 'none';
+  body.style.display = isOpen ? 'none' : 'block';
+  // Rotar la flecha dentro del header clickeado
+  var caret = hdrEl ? hdrEl.querySelector('.sc-caret-p6') : null;
+  if (caret) caret.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
 }
 
 // Pantalla 6 — expandir ficha de carrera (legacy, mantener por P7)
@@ -771,67 +766,100 @@ function saveConfig(clave, valor) {
 }
 
 // Pantalla 7 — renderizar carreras dinámicamente según resultado
+function toggleSc7(bodyId, caretEl) {
+  var body = document.getElementById(bodyId);
+  if (!body) return;
+  var isOpen = window.getComputedStyle(body).display !== 'none';
+  body.style.display = isOpen ? 'none' : 'block';
+  if (caretEl) caretEl.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+}
+
 function renderCarrerasPorCategoria() {
-  const r = VocaApp.getResultado();
+  var r = VocaApp.getResultado();
   if (!r) return;
 
-  const tabs = { univ:'UNIVERSITARIA', tec:'TECNICA', ffaa:'FUERZAS_ARMADAS', pol:'POLICIAL' };
+  var tabs = { univ:'UNIVERSITARIA', tec:'TECNICA', ffaa:'FUERZAS_ARMADAS', pol:'POLICIAL' };
+  var CAT_COLOR = { UNIVERSITARIA:'#A855F7', TECNICA:'#22C55E', FUERZAS_ARMADAS:'#F59E0B', POLICIAL:'#EC4899' };
 
-  Object.entries(tabs).forEach(([tab, cat]) => {
-    const panel = document.getElementById('t7-' + tab);
+  function makeTag(txt, tipo) {
+    var s = {
+      campo: 'background:rgba(139,0,255,0.12);color:#A080D0;border:1px solid rgba(139,0,255,0.25)',
+      espec: 'background:rgba(0,200,255,0.1);color:#60A8C8;border:1px solid rgba(0,200,255,0.2)',
+      inst:  'background:rgba(255,200,0,0.1);color:#B09040;border:1px solid rgba(255,200,0,0.2)'
+    };
+    return '<span style="display:inline-block;font-size:10px;padding:3px 9px;border-radius:20px;margin:2px 3px 2px 0;font-weight:600;' + (s[tipo]||s.campo) + '">' + txt + '</span>';
+  }
+
+  function makeInfoBloque(label, items, tipo) {
+    if (!items || !items.length) return '';
+    return '<div style="margin-bottom:7px">'
+      + '<div style="font-size:9px;font-weight:900;color:#5050A0;text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px">' + label + '</div>'
+      + '<div style="display:flex;flex-wrap:wrap">' + items.map(function(t){ return makeTag(t, tipo); }).join('') + '</div>'
+      + '</div>';
+  }
+
+  Object.keys(tabs).forEach(function(tab) {
+    var cat = tabs[tab];
+    var panel = document.getElementById('t7-' + tab);
     if (!panel) return;
 
-    const subcatNames = VocaData.getSubcatsPorCategoria(cat);
-    const subcats = VocaData.getCatalogoPorSubcats(subcatNames).map(sc => {
-      const puntajesDims = sc.dims.map(d => r.puntajesNorm[d] || 0);
-      const afinidad = Math.round(puntajesDims.reduce((a,b)=>a+b,0) / puntajesDims.length);
-      return { ...sc, afinidad };
-    }).sort((a,b) => b.afinidad - a.afinidad);
+    var subcatNames = VocaData.getSubcatsPorCategoria(cat);
+    var subcats = VocaData.getCatalogoPorSubcats(subcatNames).map(function(sc) {
+      var puntajesDims = sc.dims.map(function(d){ return r.puntajesNorm[d] || 0; });
+      var afinidad = Math.round(puntajesDims.reduce(function(a,b){ return a+b; },0) / puntajesDims.length);
+      return Object.assign({}, sc, { afinidad: afinidad });
+    }).sort(function(a,b){ return b.afinidad - a.afinidad; });
 
     if (!subcats.length) {
       panel.innerHTML = '<div class="empty-state"><div class="empty-ico">💡</div><p>No hay opciones disponibles.</p></div>';
       return;
     }
 
-    const CAT_COLOR = { UNIVERSITARIA:'#A855F7', TECNICA:'#22C55E', FUERZAS_ARMADAS:'#F59E0B', POLICIAL:'#EC4899' };
+    var color = CAT_COLOR[cat] || '#A855F7';
+    var html = '';
 
-    panel.innerHTML = subcats.map((sc, idx) => {
-      const color = CAT_COLOR[sc.categoria] || '#A855F7';
-      const bodyId = 't7-body-' + tab + '-' + idx;
-      return '<div class="carrera-card">' +
-        '<div class="card-hdr" onclick="document.getElementById(\'' + bodyId + '\').classList.toggle(\'open\')" style="cursor:pointer">' +
-          '<div class="card-hdr-ico" style="background:rgba(255,255,255,0.05)">' + sc.icono + '</div>' +
-          '<div class="card-hdr-main">' +
-            '<div class="card-hdr-name">' + sc.subcategoria + '</div>' +
-            '<div class="card-hdr-dur">' + (sc.carreras||[]).length + ' carrera(s) · ' + sc.duracion + '</div>' +
-          '</div>' +
-          '<span class="card-match" style="background:rgba(200,255,0,0.12);color:#C8FF00;border:1px solid rgba(200,255,0,0.25)">' + sc.afinidad + '% afín</span>' +
-        '</div>' +
-        '<div class="card-body ' + (idx===0?'open':'') + '" id="' + bodyId + '">' +
-          '<div style="margin-bottom:10px">' +
-            '<div class="campo-lbl" style="margin-bottom:5px">Carreras incluidas</div>' +
-            '<div style="display:flex;flex-wrap:wrap;gap:4px">' +
-              (sc.carreras||[]).map(c => '<span style="font-size:11px;padding:3px 9px;background:rgba(255,255,255,0.06);color:var(--text-2);border-radius:6px;border:1px solid var(--border)">' + c + '</span>').join('') +
-            '</div>' +
-          '</div>' +
-          (sc.descripcion ? '<p class="card-desc">' + sc.descripcion + '</p>' : '') +
-          '<div class="match-bar-wrap">' +
-            '<div class="match-bar-lbl"><span>Afinidad con tu perfil</span><span style="color:' + color + ';font-weight:900">' + sc.afinidad + '%</span></div>' +
-            '<div class="match-track2"><div class="match-fill2" style="width:' + sc.afinidad + '%;background:' + color + '"></div></div>' +
-          '</div>' +
-          '<div class="ficha-grid">' +
-            (sc.campoLaboral?.length ? '<div class="ficha-bloque" style="border-left:3px solid var(--blue)"><div class="ficha-icono">🏢</div><div class="ficha-contenido"><div class="campo-lbl">Campo laboral</div><div class="campo-tags">' + sc.campoLaboral.map(cl=>'<span class="campo-tag">'+cl+'</span>').join('') + '</div></div></div>' : '') +
-            (sc.especializaciones?.length ? '<div class="ficha-bloque" style="border-left:3px solid var(--purple)"><div class="ficha-icono">🎯</div><div class="ficha-contenido"><div class="campo-lbl">Especializaciones</div><div class="campo-tags">' + sc.especializaciones.map(e=>'<span class="campo-tag" style="background:var(--purple-bg);color:var(--purple-mid)">'+e+'</span>').join('') + '</div></div></div>' : '') +
-            (sc.sueldoJunior ? '<div class="ficha-bloque" style="border-left:3px solid #44FF88"><div class="ficha-icono">💰</div><div class="ficha-contenido"><div class="campo-lbl">Sueldo referencial</div><div class="sueldo-row"><span class="sueldo-lbl">Junior:</span><span class="sueldo-val">' + sc.sueldoJunior + '</span></div><div class="sueldo-row"><span class="sueldo-lbl">Senior:</span><span class="sueldo-val sueldo-senior">' + sc.sueldoSenior + '</span></div></div></div>' : '') +
-            (sc.instituciones?.length ? '<div class="ficha-bloque" style="border-left:3px solid var(--orange)"><div class="ficha-icono">🎓</div><div class="ficha-contenido"><div class="campo-lbl">Instituciones en Perú</div><div class="inst-list">' + sc.instituciones.map(i=>'<span class="inst-pill">'+i+'</span>').join('') + '</div></div></div>' : '') +
-            (sc.costoNacional ? '<div class="ficha-bloque" style="border-left:3px solid var(--pink)"><div class="ficha-icono">💳</div><div class="ficha-contenido"><div class="campo-lbl">Costos y financiamiento</div><div class="costo-row"><span class="costo-tipo">Nacional:</span> ' + sc.costoNacional + '</div><div class="costo-row"><span class="costo-tipo">Privada:</span> ' + (sc.costoPrivada||'') + '</div></div></div>' : '') +
-          '</div>' +
-        '</div>' +
-      '</div>';
-    }).join('');
+    subcats.forEach(function(sc, scIdx) {
+      var bodyId = 't7b-' + tab + '-' + scIdx;
+      var caretId = 't7c-' + tab + '-' + scIdx;
+      var numCarreras = (sc.carreras||[]).length;
+      var isFirst = scIdx === 0;
+
+      var carrerasHtml = (sc.carreras||[]).map(function(car) {
+        return '<div style="border-top:1px solid rgba(255,255,255,0.05);background:#0F0F28">'
+          + '<div style="display:flex;align-items:center;gap:8px;padding:9px 13px 5px">'
+            + '<div style="width:28px;height:28px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;background:rgba(255,255,255,0.05)">' + (car.icono||'') + '</div>'
+            + '<span style="font-size:12px;font-weight:900;color:#fff">' + (car.nombre||'') + '</span>'
+          + '</div>'
+          + '<div style="padding:2px 13px 10px 49px">'
+            + (car.descripcion ? '<div style="font-size:11px;color:#7070A0;line-height:1.5;margin-bottom:7px">' + car.descripcion + '</div>' : '')
+            + makeInfoBloque('Campo laboral', car.campoLaboral, 'campo')
+            + makeInfoBloque('Especializaciones', car.especializaciones, 'espec')
+            + makeInfoBloque('Instituciones de referencia (Peru)', car.instituciones, 'inst')
+          + '</div>'
+        + '</div>';
+      }).join('');
+
+      html += '<div style="margin-bottom:10px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.08)">'
+        + '<div onclick="toggleSc7(' + "'" + bodyId + "'" + ',document.getElementById(' + "'" + caretId + "'" + '))" style="padding:10px 13px;cursor:pointer;background:rgba(255,255,255,0.03)">'
+          + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px">'
+            + '<span style="font-size:13px;font-weight:900;color:' + color + '">' + (sc.icono||'') + ' ' + (sc.subcategoria||'') + '</span>'
+            + '<div style="display:flex;align-items:center;gap:6px">'
+              + '<span style="font-size:10px;color:#6060A0;background:rgba(255,255,255,0.06);padding:2px 7px;border-radius:10px">' + numCarreras + ' carrera' + (numCarreras!==1?'s':'') + '</span>'
+              + '<span id="' + caretId + '" style="font-size:10px;color:#6060A0;transition:transform .2s;display:inline-block;transform:' + (isFirst?'rotate(180deg)':'rotate(0deg)') + '">\u25bc</span>'
+            + '</div>'
+          + '</div>'
+          + '<div style="display:flex;justify-content:space-between">'
+            + '<span style="font-size:11px;color:#7060A0">' + (sc.duracion||'') + '</span>'
+            + '<span style="font-size:12px;font-weight:900;color:#C8FF00">' + sc.afinidad + '% de afinidad</span>'
+          + '</div>'
+        + '</div>'
+        + '<div id="' + bodyId + '" style="display:' + (isFirst?'block':'none') + '">' + carrerasHtml + '</div>'
+      + '</div>';
+    });
+
+    panel.innerHTML = html;
   });
 }
-
 
 // Hook: renderizar carreras cuando se entra a P7
 const _origIrA = VocaApp.irA;

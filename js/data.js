@@ -275,202 +275,471 @@ const VocaData = (() => {
   /* ============================================================
      CATÁLOGO DE CARRERAS
      Fuente: Hoja 5 - Catálogo Carreras del Excel
-     Estructura: por SUBCATEGORÍA, con array de carreras dentro.
-     Cada subcategoría tiene sus propias dims, instituciones, etc.
+     Estructura: por SUBCATEGORÍA, con array de carreras individuales.
+     Cada carrera tiene: icono, nombre, descripcion, campoLaboral[],
+     especializaciones[], instituciones[].
+     Para modificar datos de una carrera, editar directamente aquí.
   ============================================================ */
   const CATALOGO = [
 
-    // ── UNIVERSITARIA ─────────────────────────────────────
+    // ══════════════════════════════════════════════════════════
+    //  UNIVERSITARIA
+    // ══════════════════════════════════════════════════════════
     {
       categoria: 'UNIVERSITARIA', subcategoria: 'Ciencias e Ingeniería',
       icono: '⚙️', dims: ['DIM-01', 'DIM-03'], duracion: '5 años',
-      descripcion: 'Formación universitaria en ingeniería y tecnología aplicada. Amplia demanda en el mercado laboral peruano.',
-      carreras: ['Ingeniería de Sistemas', 'Ingeniería Civil', 'Ingeniería Industrial', 'Ingeniería Ambiental', 'Ingeniería Mecatrónica'],
-      campoLaboral: ['Empresas privadas', 'Consultoría', 'Sector público', 'Emprendimiento', 'Minería'],
-      especializaciones: ['Ciberseguridad', 'Inteligencia Artificial', 'Gestión de Proyectos', 'Estructuras', 'Automatización'],
-      instituciones: ['UNMSM', 'UNI', 'PUCP', 'UNSA', 'UPC'],
-      sueldoJunior: 'S/ 2,500 – 4,500',
-      sueldoSenior: 'S/ 7,000 – 18,000',
-      costoNacional: 'Matrícula S/ 50 – 150 | Ciclo gratuito',
-      costoPrivada: 'Matrícula S/ 800 – 2,000 | Ciclo S/ 4,000 – 9,500'
+      descripcion: 'Formación universitaria en ingeniería y ciencias exactas. Alta demanda en el mercado laboral peruano.',
+      carreras: [
+        {
+          nombre: 'Ingeniería de Sistemas',
+          icono: '💻',
+          descripcion: 'Diseña y desarrolla sistemas de información, software y redes para optimizar procesos organizacionales.',
+          campoLaboral: ['Empresas de TI', 'Consultoría tecnológica', 'Banca y finanzas', 'Startups', 'Sector público'],
+          especializaciones: ['Ciberseguridad', 'Inteligencia Artificial', 'Desarrollo Web', 'Cloud Computing', 'DevOps'],
+          instituciones: ['UNI', 'PUCP', 'UPC', 'UNMSM', 'USIL']
+        },
+        {
+          nombre: 'Ingeniería Civil',
+          icono: '🏗️',
+          descripcion: 'Planifica, diseña y supervisa la construcción de infraestructura vial, edificaciones y obras hidráulicas.',
+          campoLaboral: ['Construcción', 'Minería', 'Sector público', 'Consultoría', 'Inmobiliarias'],
+          especializaciones: ['Estructuras', 'Geotecnia', 'Hidráulica', 'Vías y transportes', 'Gestión de proyectos'],
+          instituciones: ['UNI', 'PUCP', 'UNSA', 'UNMSM', 'UPC']
+        },
+        {
+          nombre: 'Ingeniería Industrial',
+          icono: '🏭',
+          descripcion: 'Optimiza procesos productivos y de gestión para mejorar la eficiencia y competitividad de las organizaciones.',
+          campoLaboral: ['Manufactura', 'Logística', 'Consultoría', 'Retail', 'Minería'],
+          especializaciones: ['Gestión de operaciones', 'Lean Manufacturing', 'Supply Chain', 'Calidad', 'Seguridad industrial'],
+          instituciones: ['UNI', 'PUCP', 'UPC', 'UNMSM', 'USIL']
+        },
+        {
+          nombre: 'Ingeniería Ambiental',
+          icono: '🌿',
+          descripcion: 'Gestiona el impacto ambiental de actividades humanas y promueve el desarrollo sostenible.',
+          campoLaboral: ['Minería', 'Industria', 'Sector público', 'ONGs ambientales', 'Consultoría'],
+          especializaciones: ['Gestión ambiental', 'Recursos hídricos', 'Energías renovables', 'Residuos sólidos'],
+          instituciones: ['UNMSM', 'UPC', 'PUCP', 'UNALM', 'UNFV']
+        },
+        {
+          nombre: 'Ingeniería Mecatrónica',
+          icono: '🤖',
+          descripcion: 'Integra mecánica, electrónica e informática para diseñar sistemas automáticos y robots industriales.',
+          campoLaboral: ['Industria', 'Minería', 'Manufactura', 'Tecnología', 'Investigación'],
+          especializaciones: ['Robótica', 'Automatización industrial', 'Sistemas embebidos', 'IoT'],
+          instituciones: ['UNI', 'PUCP', 'UPC', 'UTEC', 'San Ignacio de Loyola']
+        }
+      ]
     },
     {
       categoria: 'UNIVERSITARIA', subcategoria: 'Ciencias de la Salud',
       icono: '🔬', dims: ['DIM-01', 'DIM-03', 'DIM-04'], duracion: '5-7 años',
-      descripcion: 'Carreras orientadas a la prevención, diagnóstico y tratamiento de enfermedades. Alta vocación de servicio.',
-      carreras: ['Medicina Humana', 'Enfermería', 'Psicología', 'Odontología', 'Nutrición'],
-      campoLaboral: ['Hospitales', 'Clínicas', 'Centros de salud', 'Investigación', 'Salud pública'],
-      especializaciones: ['Cardiología', 'Pediatría', 'Salud mental', 'Nutrición clínica', 'Odontología pediátrica'],
-      instituciones: ['UNMSM', 'UPCH (Cayetano Heredia)', 'USMP', 'URP', 'UPC'],
-      sueldoJunior: 'S/ 2,000 – 5,000',
-      sueldoSenior: 'S/ 8,000 – 18,000',
-      costoNacional: 'Matrícula S/ 400 – 600 | Ciclo S/ 1,000 – 2,000',
-      costoPrivada: 'Matrícula S/ 1,000 – 2,500 | Ciclo S/ 6,000 – 12,000'
+      descripcion: 'Carreras orientadas a la prevención, diagnóstico y tratamiento de enfermedades con alta vocación de servicio.',
+      carreras: [
+        {
+          nombre: 'Medicina Humana',
+          icono: '🩺',
+          descripcion: 'Previene, diagnostica y trata enfermedades en personas, trabajando en equipos multidisciplinarios de salud.',
+          campoLaboral: ['Hospitales', 'Clínicas privadas', 'Centros de salud', 'Investigación médica', 'Salud pública'],
+          especializaciones: ['Cardiología', 'Pediatría', 'Cirugía', 'Medicina interna', 'Salud pública'],
+          instituciones: ['UNMSM', 'UPCH (Cayetano Heredia)', 'USMP', 'URP', 'UPC']
+        },
+        {
+          nombre: 'Enfermería',
+          icono: '💉',
+          descripcion: 'Brinda cuidados integrales al paciente, apoyando al equipo médico en diagnóstico, tratamiento y recuperación.',
+          campoLaboral: ['Hospitales', 'Clínicas', 'Centros de salud', 'Domicilio', 'Salud ocupacional'],
+          especializaciones: ['Cuidados intensivos', 'Pediatría', 'Salud mental', 'Enfermería quirúrgica'],
+          instituciones: ['UNMSM', 'UPCH', 'USMP', 'URP', 'Institutos superiores']
+        },
+        {
+          nombre: 'Psicología',
+          icono: '🧠',
+          descripcion: 'Estudia el comportamiento humano para apoyar la salud mental, el desarrollo personal y el bienestar social.',
+          campoLaboral: ['Clínicas y hospitales', 'Empresas (RR.HH.)', 'Educación', 'Consultoría', 'ONGs'],
+          especializaciones: ['Psicología clínica', 'Psicología organizacional', 'Neuropsicología', 'Psicología educativa'],
+          instituciones: ['PUCP', 'UNMSM', 'USMP', 'URP', 'UPC']
+        },
+        {
+          nombre: 'Odontología',
+          icono: '🦷',
+          descripcion: 'Previene, diagnostica y trata enfermedades de la cavidad oral, contribuyendo a la salud integral del paciente.',
+          campoLaboral: ['Consultorios privados', 'Hospitales', 'Clínicas dentales', 'Salud pública', 'Docencia'],
+          especializaciones: ['Ortodoncia', 'Endodoncia', 'Cirugía maxilofacial', 'Odontopediatría'],
+          instituciones: ['UNMSM', 'UPCH', 'USMP', 'URP', 'UIGV']
+        },
+        {
+          nombre: 'Nutrición',
+          icono: '🥗',
+          descripcion: 'Promueve hábitos alimentarios saludables y diseña planes nutricionales para prevenir enfermedades.',
+          campoLaboral: ['Hospitales', 'Clínicas', 'Deportes', 'Industria alimentaria', 'Consultoría privada'],
+          especializaciones: ['Nutrición clínica', 'Nutrición deportiva', 'Salud pública', 'Industria de alimentos'],
+          instituciones: ['UNMSM', 'UPCH', 'UPC', 'USMP', 'URP']
+        }
+      ]
     },
     {
       categoria: 'UNIVERSITARIA', subcategoria: 'Ciencias Sociales',
       icono: '⚖️', dims: ['DIM-01', 'DIM-04'], duracion: '5 años',
       descripcion: 'Carreras centradas en el estudio de la sociedad, el derecho, la educación y la comunicación.',
-      carreras: ['Derecho', 'Educación', 'Trabajo Social', 'Sociología', 'Comunicaciones'],
-      campoLaboral: ['Sector público', 'ONGs', 'Medios de comunicación', 'Educación', 'Poder Judicial'],
-      especializaciones: ['Derecho corporativo', 'Derecho penal', 'Periodismo', 'Educación inicial', 'Políticas sociales'],
-      instituciones: ['UNMSM', 'PUCP', 'UNFV', 'UNSA', 'San Martín'],
-      sueldoJunior: 'S/ 1,800 – 3,500',
-      sueldoSenior: 'S/ 5,000 – 15,000',
-      costoNacional: 'Matrícula S/ 50 – 150 | Ciclo gratuito',
-      costoPrivada: 'Matrícula S/ 600 – 1,500 | Ciclo S/ 3,000 – 7,500'
+      carreras: [
+        {
+          nombre: 'Derecho',
+          icono: '⚖️',
+          descripcion: 'Estudia el ordenamiento jurídico para defender derechos, asesorar legalmente y administrar justicia.',
+          campoLaboral: ['Estudio de abogados', 'Sector público', 'Empresas privadas', 'Poder Judicial', 'ONGs'],
+          especializaciones: ['Derecho corporativo', 'Derecho penal', 'Derecho laboral', 'Derecho tributario', 'Derecho internacional'],
+          instituciones: ['PUCP', 'UNMSM', 'USMP', 'URP', 'San Martín de Porres']
+        },
+        {
+          nombre: 'Educación',
+          icono: '📚',
+          descripcion: 'Forma profesionales para el diseño y aplicación de procesos de enseñanza-aprendizaje en todos los niveles.',
+          campoLaboral: ['Colegios públicos', 'Colegios privados', 'Universidades', 'Institutos', 'ONGs educativas'],
+          especializaciones: ['Educación inicial', 'Educación primaria', 'Educación secundaria', 'Gestión educativa'],
+          instituciones: ['PUCP', 'UNMSM', 'UNFV', 'UNE (La Cantuta)', 'San Agustín']
+        },
+        {
+          nombre: 'Comunicaciones',
+          icono: '📡',
+          descripcion: 'Gestiona la producción y difusión de contenidos en medios de comunicación, publicidad y relaciones públicas.',
+          campoLaboral: ['Medios de comunicación', 'Agencias de publicidad', 'Empresas', 'ONGs', 'Sector público'],
+          especializaciones: ['Periodismo', 'Publicidad', 'Relaciones públicas', 'Producción audiovisual', 'Comunicación digital'],
+          instituciones: ['PUCP', 'UNMSM', 'USMP', 'UPC', 'San Martín de Porres']
+        },
+        {
+          nombre: 'Trabajo Social',
+          icono: '🤝',
+          descripcion: 'Promueve el bienestar de personas y comunidades vulnerables mediante intervención social y gestión de recursos.',
+          campoLaboral: ['ONGs', 'Sector público', 'Hospitales', 'Empresas (RR.HH.)', 'Municipalidades'],
+          especializaciones: ['Desarrollo comunitario', 'Salud social', 'Familia y niñez', 'Gestión social'],
+          instituciones: ['UNMSM', 'PUCP', 'UNFV', 'San Marcos', 'Institutos superiores']
+        }
+      ]
     },
     {
       categoria: 'UNIVERSITARIA', subcategoria: 'Ciencias Económicas',
       icono: '📊', dims: ['DIM-01', 'DIM-03'], duracion: '5 años',
-      descripcion: 'Formación en gestión empresarial, finanzas, economía y comercio internacional.',
-      carreras: ['Economía', 'Administración de Empresas', 'Contabilidad', 'Negocios Internacionales'],
-      campoLaboral: ['Banca', 'Empresas privadas', 'Consultoría', 'Gobierno', 'Comercio exterior'],
-      especializaciones: ['Finanzas', 'Marketing', 'Recursos Humanos', 'Auditoría', 'Comercio internacional'],
-      instituciones: ['UNMSM', 'UP (Pacífico)', 'UPC', 'ESAN', 'USIL'],
-      sueldoJunior: 'S/ 2,000 – 3,500',
-      sueldoSenior: 'S/ 6,000 – 15,000',
-      costoNacional: 'Matrícula S/ 50 – 150 | Ciclo gratuito',
-      costoPrivada: 'Matrícula S/ 800 – 2,500 | Ciclo S/ 5,000 – 11,000'
+      descripcion: 'Formación en gestión empresarial, finanzas, economía y comercio para el sector público y privado.',
+      carreras: [
+        {
+          nombre: 'Administración de Empresas',
+          icono: '🏢',
+          descripcion: 'Planifica, organiza y dirige recursos humanos, financieros y operativos para alcanzar los objetivos empresariales.',
+          campoLaboral: ['Empresas privadas', 'Sector público', 'Consultoría', 'Emprendimiento', 'Banca'],
+          especializaciones: ['Marketing', 'Recursos Humanos', 'Finanzas', 'Operaciones', 'Comercio exterior'],
+          instituciones: ['UNMSM', 'UP (Pacífico)', 'ESAN', 'UPC', 'USIL']
+        },
+        {
+          nombre: 'Economía',
+          icono: '📈',
+          descripcion: 'Analiza el comportamiento de mercados, políticas económicas y el uso eficiente de recursos en una sociedad.',
+          campoLaboral: ['Banca central', 'Ministerios', 'Empresas financieras', 'Consultoría', 'Organismos internacionales'],
+          especializaciones: ['Economía financiera', 'Economía pública', 'Econometría', 'Economía internacional'],
+          instituciones: ['UNMSM', 'PUCP', 'UP (Pacífico)', 'UPC', 'ESAN']
+        },
+        {
+          nombre: 'Contabilidad',
+          icono: '🧾',
+          descripcion: 'Registra, analiza e interpreta la información financiera de las organizaciones para la toma de decisiones.',
+          campoLaboral: ['Empresas privadas', 'Firmas auditoras', 'Sector público', 'Bancos', 'Emprendimiento'],
+          especializaciones: ['Auditoría', 'Tributación', 'Contabilidad de costos', 'Finanzas corporativas'],
+          instituciones: ['UNMSM', 'UPC', 'USMP', 'San Martín de Porres', 'URP']
+        },
+        {
+          nombre: 'Negocios Internacionales',
+          icono: '🌍',
+          descripcion: 'Gestiona operaciones de comercio exterior, inversión extranjera y relaciones comerciales entre países.',
+          campoLaboral: ['Comercio exterior', 'Empresas exportadoras', 'Aduanas', 'Banca internacional', 'Consultoría'],
+          especializaciones: ['Logística internacional', 'Comercio exterior', 'Gestión aduanera', 'Marketing internacional'],
+          instituciones: ['UNMSM', 'UPC', 'USIL', 'San Martín de Porres', 'ESAN']
+        }
+      ]
     },
     {
       categoria: 'UNIVERSITARIA', subcategoria: 'Humanidades y Artes',
       icono: '🎨', dims: ['DIM-01', 'DIM-04'], duracion: '5 años',
       descripcion: 'Carreras creativas y humanísticas orientadas a la cultura, el diseño, la filosofía y la expresión artística.',
-      carreras: ['Arquitectura', 'Diseño Gráfico', 'Literatura', 'Filosofía', 'Historia'],
-      campoLaboral: ['Cultura y artes', 'Diseño', 'Medios', 'Investigación', 'Docencia universitaria'],
-      especializaciones: ['Diseño UX/UI', 'Arquitectura sostenible', 'Gestión cultural', 'Edición literaria'],
-      instituciones: ['PUCP', 'UNMSM', 'UPC', 'Corriente Alterna', 'ENSABAP'],
-      sueldoJunior: 'S/ 1,500 – 3,000',
-      sueldoSenior: 'S/ 4,000 – 10,000',
-      costoNacional: 'Matrícula S/ 50 – 150 | Ciclo gratuito',
-      costoPrivada: 'Matrícula S/ 600 – 1,500 | Ciclo S/ 3,000 – 7,000'
+      carreras: [
+        {
+          nombre: 'Arquitectura',
+          icono: '🏛️',
+          descripcion: 'Diseña espacios habitables que integran funcionalidad, estética y sostenibilidad para mejorar la calidad de vida.',
+          campoLaboral: ['Estudios de arquitectura', 'Inmobiliarias', 'Sector público', 'Diseño de interiores', 'Docencia'],
+          especializaciones: ['Arquitectura sostenible', 'Urbanismo', 'Diseño de interiores', 'Gestión de proyectos'],
+          instituciones: ['PUCP', 'UPC', 'UPN', 'UNMSM', 'Ricardo Palma']
+        },
+        {
+          nombre: 'Diseño Gráfico',
+          icono: '🎨',
+          descripcion: 'Crea y comunica mensajes visuales mediante el manejo creativo de imágenes, tipografía y medios digitales.',
+          campoLaboral: ['Agencias de publicidad', 'Empresas tecnológicas', 'Medios de comunicación', 'Freelance', 'ONGs'],
+          especializaciones: ['Diseño UX/UI', 'Branding', 'Motion Graphics', 'Ilustración digital', 'Fotografía'],
+          instituciones: ['PUCP', 'UPC', 'ISIL', 'Toulouse Lautrec', 'Corriente Alterna']
+        },
+        {
+          nombre: 'Literatura',
+          icono: '📖',
+          descripcion: 'Estudia y analiza las obras literarias para desarrollar pensamiento crítico, escritura creativa y comunicación.',
+          campoLaboral: ['Editoriales', 'Medios de comunicación', 'Docencia', 'Cultura', 'ONGs culturales'],
+          especializaciones: ['Literatura hispanoamericana', 'Lingüística', 'Edición', 'Creación literaria', 'Traducción'],
+          instituciones: ['PUCP', 'UNMSM', 'UNFV', 'Ricardo Palma', 'San Marcos']
+        }
+      ]
     },
 
-    // ── TÉCNICA ───────────────────────────────────────────
+    // ══════════════════════════════════════════════════════════
+    //  TÉCNICA
+    // ══════════════════════════════════════════════════════════
     {
       categoria: 'TECNICA', subcategoria: 'Tecnología',
       icono: '🖥️', dims: ['DIM-02', 'DIM-03'], duracion: '2-3 años',
       descripcion: 'Formación técnica en desarrollo de software, redes y seguridad informática. Alta empleabilidad.',
-      carreras: ['Desarrollo de Software', 'Redes y Comunicaciones', 'Ciberseguridad', 'Soporte Técnico'],
-      campoLaboral: ['Empresas TI', 'Freelance', 'Startups', 'Banca', 'ISPs'],
-      especializaciones: ['Frontend', 'Backend', 'DevOps', 'Cisco CCNA', 'Cloud Computing'],
-      instituciones: ['SENATI', 'Cibertec', 'Tecsup', 'ISIL', 'Zegel'],
-      sueldoJunior: 'S/ 1,500 – 3,500',
-      sueldoSenior: 'S/ 5,000 – 14,000',
-      costoNacional: 'Matrícula S/ 200 – 500 | Ciclo S/ 1,200 – 2,500',
-      costoPrivada: 'Matrícula S/ 400 – 1,000 | Ciclo S/ 2,000 – 4,500'
+      carreras: [
+        {
+          nombre: 'Desarrollo de Software',
+          icono: '💾',
+          descripcion: 'Crea y mantiene aplicaciones web, móviles y de escritorio usando lenguajes de programación modernos.',
+          campoLaboral: ['Empresas de software', 'Startups', 'Freelance', 'Banca', 'Retail digital'],
+          especializaciones: ['Frontend', 'Backend', 'Mobile (Android/iOS)', 'Full Stack', 'QA Testing'],
+          instituciones: ['Cibertec', 'ISIL', 'Tecsup', 'Zegel', 'SENATI']
+        },
+        {
+          nombre: 'Redes y Comunicaciones',
+          icono: '🌐',
+          descripcion: 'Instala, configura y administra infraestructura de redes, servidores y sistemas de telecomunicaciones.',
+          campoLaboral: ['ISPs', 'Empresas de telecomunicaciones', 'Sector bancario', 'Hospitales', 'Sector público'],
+          especializaciones: ['Cisco CCNA', 'Administración de servidores', 'Seguridad de redes', 'VoIP'],
+          instituciones: ['Cibertec', 'SENATI', 'Tecsup', 'ISIL', 'IDAT']
+        },
+        {
+          nombre: 'Ciberseguridad',
+          icono: '🛡️',
+          descripcion: 'Protege sistemas informáticos y datos de ataques, vulnerabilidades y amenazas digitales.',
+          campoLaboral: ['Bancos', 'Empresas de TI', 'Gobierno', 'Consultoría de seguridad', 'Startups'],
+          especializaciones: ['Ethical hacking', 'Análisis forense digital', 'Seguridad en la nube', 'Criptografía'],
+          instituciones: ['Cibertec', 'ISIL', 'Tecsup', 'Zegel', 'IDAT']
+        },
+        {
+          nombre: 'Soporte Técnico',
+          icono: '🔧',
+          descripcion: 'Brinda asistencia técnica en hardware, software y redes para usuarios y organizaciones.',
+          campoLaboral: ['Empresas de TI', 'Sector público', 'Hospitales', 'Educación', 'Retail'],
+          especializaciones: ['Help Desk', 'Administración Windows/Linux', 'Virtualización', 'Cloud básico'],
+          instituciones: ['SENATI', 'Cibertec', 'IDAT', 'Zegel', 'Institutos públicos']
+        }
+      ]
     },
     {
       categoria: 'TECNICA', subcategoria: 'Industrial y Mecánica',
-      icono: '🔧', dims: ['DIM-02'], duracion: '2-3 años',
+      icono: '🔩', dims: ['DIM-02'], duracion: '2-3 años',
       descripcion: 'Formación práctica en mecánica, electricidad y mantenimiento industrial. Alta demanda en minería y manufactura.',
-      carreras: ['Mecánica Automotriz', 'Electricidad Industrial', 'Soldadura', 'Mantenimiento Industrial'],
-      campoLaboral: ['Industria', 'Minería', 'Manufactura', 'Construcción', 'Transporte'],
-      especializaciones: ['Electrónica automotriz', 'PLC y automatización', 'Energías renovables', 'Alta tensión'],
-      instituciones: ['SENATI', 'Tecsup', 'SENCICO', 'CFP'],
-      sueldoJunior: 'S/ 1,200 – 2,200',
-      sueldoSenior: 'S/ 3,500 – 8,000',
-      costoNacional: 'Matrícula S/ 100 – 300 | Ciclo S/ 700 – 1,500',
-      costoPrivada: 'Matrícula S/ 250 – 600 | Ciclo S/ 1,200 – 2,500'
+      carreras: [
+        {
+          nombre: 'Mecánica Automotriz',
+          icono: '🚗',
+          descripcion: 'Diagnostica y repara vehículos de combustión y eléctricos, aplicando tecnología de diagnóstico electrónico.',
+          campoLaboral: ['Concesionarias', 'Talleres automotrices', 'Empresas de transporte', 'Minería', 'Sector público'],
+          especializaciones: ['Electrónica automotriz', 'Vehículos eléctricos', 'Diagnóstico computarizado', 'Pintura automotriz'],
+          instituciones: ['SENATI', 'Tecsup', 'CFP', 'CETPRO', 'Institutos técnicos regionales']
+        },
+        {
+          nombre: 'Electricidad Industrial',
+          icono: '⚡',
+          descripcion: 'Instala, mantiene y repara sistemas eléctricos industriales, tableros de control y equipos de alta tensión.',
+          campoLaboral: ['Industria', 'Minería', 'Construcción', 'Sector público', 'Plantas industriales'],
+          especializaciones: ['Alta tensión', 'PLC y automatización', 'Energías renovables', 'Instalaciones eléctricas'],
+          instituciones: ['SENATI', 'Tecsup', 'SENCICO', 'CFP', 'Institutos públicos']
+        },
+        {
+          nombre: 'Mantenimiento Industrial',
+          icono: '🏗️',
+          descripcion: 'Garantiza el funcionamiento óptimo de maquinaria y equipos industriales mediante mantenimiento preventivo y correctivo.',
+          campoLaboral: ['Manufactura', 'Minería', 'Industria pesquera', 'Plásticos', 'Alimentos'],
+          especializaciones: ['Mantenimiento predictivo', 'Neumática', 'Hidráulica', 'Soldadura industrial'],
+          instituciones: ['SENATI', 'Tecsup', 'CFP', 'SENCICO', 'Institutos técnicos']
+        }
+      ]
     },
     {
       categoria: 'TECNICA', subcategoria: 'Salud Técnica',
       icono: '🏥', dims: ['DIM-02', 'DIM-04'], duracion: '3 años',
       descripcion: 'Formación técnica en salud para apoyar a profesionales médicos en hospitales, clínicas y farmacias.',
-      carreras: ['Enfermería Técnica', 'Laboratorio Clínico', 'Farmacia', 'Prótesis Dental'],
-      campoLaboral: ['Hospitales', 'Clínicas', 'Farmacias', 'Laboratorios', 'Centros de salud'],
-      especializaciones: ['Cuidados intensivos', 'Análisis clínicos', 'Farmacología', 'Odontología técnica'],
-      instituciones: ['Institutos tecnológicos públicos', 'SIAT', 'Privados acreditados'],
-      sueldoJunior: 'S/ 1,200 – 2,000',
-      sueldoSenior: 'S/ 2,500 – 5,000',
-      costoNacional: 'Matrícula S/ 100 – 300 | Ciclo S/ 800 – 1,500',
-      costoPrivada: 'Matrícula S/ 400 – 800 | Ciclo S/ 1,500 – 2,800'
+      carreras: [
+        {
+          nombre: 'Enfermería Técnica',
+          icono: '🩹',
+          descripcion: 'Asiste al enfermero y médico en el cuidado del paciente, aplicando procedimientos de salud básicos.',
+          campoLaboral: ['Hospitales', 'Clínicas', 'Centros de salud', 'Hogares de ancianos', 'Atención domiciliaria'],
+          especializaciones: ['Cuidados del paciente', 'Urgencias y emergencias', 'Salud materno-infantil'],
+          instituciones: ['Institutos tecnológicos públicos', 'SIAT', 'ESSALUD', 'Institutos privados acreditados']
+        },
+        {
+          nombre: 'Laboratorio Clínico',
+          icono: '🧪',
+          descripcion: 'Realiza análisis de muestras biológicas para apoyar el diagnóstico médico en laboratorios clínicos.',
+          campoLaboral: ['Hospitales', 'Clínicas', 'Laboratorios privados', 'Centros de diagnóstico', 'Bancos de sangre'],
+          especializaciones: ['Hematología', 'Microbiología', 'Bioquímica clínica', 'Banco de sangre'],
+          instituciones: ['Institutos tecnológicos públicos', 'SIAT', 'Institutos privados acreditados']
+        },
+        {
+          nombre: 'Farmacia',
+          icono: '💊',
+          descripcion: 'Dispensa, almacena y asesora sobre medicamentos garantizando el uso seguro y eficaz de los fármacos.',
+          campoLaboral: ['Farmacias y boticas', 'Hospitales', 'Clínicas', 'Laboratorios farmacéuticos', 'Droguerías'],
+          especializaciones: ['Farmacia hospitalaria', 'Atención farmacéutica', 'Control de calidad'],
+          instituciones: ['Institutos tecnológicos', 'SIAT', 'Farma escuelas privadas']
+        },
+        {
+          nombre: 'Prótesis Dental',
+          icono: '🦷',
+          descripcion: 'Fabrica y repara prótesis dentales y aparatos de ortodoncia según indicaciones del odontólogo.',
+          campoLaboral: ['Laboratorios dentales', 'Consultorios odontológicos', 'Clínicas dentales', 'Sector privado'],
+          especializaciones: ['Prótesis fija', 'Prótesis removible', 'Ortodoncia técnica', 'Implantología técnica'],
+          instituciones: ['Institutos tecnológicos privados', 'SIAT', 'UIGV técnica']
+        }
+      ]
     },
     {
       categoria: 'TECNICA', subcategoria: 'Administración y Comercio',
       icono: '📋', dims: ['DIM-02'], duracion: '2-3 años',
       descripcion: 'Formación técnica en gestión empresarial, contabilidad y marketing digital.',
-      carreras: ['Contabilidad Técnica', 'Administración Bancaria', 'Marketing Digital'],
-      campoLaboral: ['Bancos', 'Retail', 'Empresas', 'Emprendimiento', 'Sector público'],
-      especializaciones: ['Contabilidad digital', 'Banca y finanzas', 'E-commerce', 'Community management'],
-      instituciones: ['ISIL', 'Cibertec', 'IPP', 'Zegel', 'SISE'],
-      sueldoJunior: 'S/ 1,200 – 2,200',
-      sueldoSenior: 'S/ 3,000 – 6,000',
-      costoNacional: 'Matrícula S/ 100 – 300 | Ciclo S/ 800 – 1,500',
-      costoPrivada: 'Matrícula S/ 300 – 700 | Ciclo S/ 1,200 – 2,500'
+      carreras: [
+        {
+          nombre: 'Contabilidad Técnica',
+          icono: '📒',
+          descripcion: 'Registra y procesa información contable y tributaria para la toma de decisiones en empresas.',
+          campoLaboral: ['Empresas privadas', 'Estudios contables', 'Sector público', 'Comercio', 'Industria'],
+          especializaciones: ['Contabilidad digital', 'Tributación', 'Planillas', 'Costos empresariales'],
+          instituciones: ['ISIL', 'Cibertec', 'IPP', 'Zegel', 'SISE']
+        },
+        {
+          nombre: 'Administración Bancaria',
+          icono: '🏦',
+          descripcion: 'Opera y gestiona servicios financieros en instituciones bancarias y entidades de crédito.',
+          campoLaboral: ['Bancos', 'Cajas municipales', 'Cooperativas', 'Financieras', 'Microfinanzas'],
+          especializaciones: ['Atención al cliente bancario', 'Créditos y cobranzas', 'Seguros', 'Banca digital'],
+          instituciones: ['ISIL', 'Cibertec', 'Zegel', 'IPP', 'SISE']
+        },
+        {
+          nombre: 'Marketing Digital',
+          icono: '📱',
+          descripcion: 'Diseña y ejecuta estrategias de marketing en canales digitales para incrementar ventas y posicionamiento de marca.',
+          campoLaboral: ['Agencias digitales', 'Empresas de retail', 'Startups', 'E-commerce', 'Freelance'],
+          especializaciones: ['Community management', 'SEO/SEM', 'Email marketing', 'Analítica web', 'E-commerce'],
+          instituciones: ['ISIL', 'Cibertec', 'IPP', 'Zegel', 'SISE']
+        }
+      ]
     },
 
-    // ── FUERZAS ARMADAS ───────────────────────────────────
+    // ══════════════════════════════════════════════════════════
+    //  FUERZAS ARMADAS
+    // ══════════════════════════════════════════════════════════
     {
       categoria: 'FUERZAS_ARMADAS', subcategoria: 'Ejército',
       icono: '🎖️', dims: ['DIM-05', 'DIM-06'], duracion: '3-5 años',
-      descripcion: 'Formación como Oficial o Suboficial del Ejército del Perú. Defensa nacional y gestión de emergencias.',
-      carreras: ['Oficial del Ejército del Perú', 'Suboficial del Ejército del Perú'],
-      campoLaboral: ['Defensa nacional', 'Logística militar', 'Inteligencia', 'Misiones ONU', 'Gestión de desastres'],
-      especializaciones: ['Infantería', 'Artillería', 'Inteligencia militar', 'Ingeniería militar'],
-      instituciones: ['Escuela Militar de Chorrillos', 'IESTPE', 'CAEN'],
-      sueldoJunior: 'S/ 2,500 – 4,000',
-      sueldoSenior: 'S/ 6,000 – 12,000',
-      costoNacional: 'Gratuito con beca del Estado peruano',
-      costoPrivada: 'N/A — institución estatal'
+      descripcion: 'Formación como Oficial o Suboficial del Ejército del Perú para la defensa nacional.',
+      carreras: [
+        {
+          nombre: 'Oficial del Ejército del Perú',
+          icono: '⭐',
+          descripcion: 'Lidera unidades militares terrestres en operaciones de defensa nacional, emergencias y misiones internacionales.',
+          campoLaboral: ['Defensa nacional', 'Inteligencia militar', 'Logística militar', 'Misiones ONU', 'Gestión de desastres'],
+          especializaciones: ['Infantería', 'Artillería', 'Inteligencia', 'Ingeniería militar', 'Comunicaciones'],
+          instituciones: ['Escuela Militar de Chorrillos', 'CAEN']
+        },
+        {
+          nombre: 'Suboficial del Ejército del Perú',
+          icono: '🎗️',
+          descripcion: 'Ejecuta misiones operativas y de apoyo en unidades del Ejército bajo mando de oficiales.',
+          campoLaboral: ['Operaciones militares', 'Logística', 'Sanidad militar', 'Comunicaciones', 'Policía Militar'],
+          especializaciones: ['Infantería', 'Transmisiones', 'Sanidad', 'Intendencia', 'Artillería'],
+          instituciones: ['IESTPE - Escuela de Suboficiales']
+        }
+      ]
     },
     {
       categoria: 'FUERZAS_ARMADAS', subcategoria: 'Marina',
       icono: '⚓', dims: ['DIM-05', 'DIM-06'], duracion: '3-5 años',
-      descripcion: 'Formación como Oficial o Suboficial de la Marina de Guerra del Perú. Protección marítima y lacustre.',
-      carreras: ['Oficial de la Marina de Guerra', 'Suboficial de la Marina de Guerra'],
-      campoLaboral: ['Defensa marítima', 'Operaciones navales', 'Guardacostas', 'Puertos', 'Misiones ONU'],
-      especializaciones: ['Navegación', 'Ingeniería naval', 'Infantería de Marina', 'Inteligencia naval'],
-      instituciones: ['Escuela Naval del Perú', 'CITEN'],
-      sueldoJunior: 'S/ 2,500 – 4,000',
-      sueldoSenior: 'S/ 6,000 – 12,000',
-      costoNacional: 'Gratuito con beca del Estado peruano',
-      costoPrivada: 'N/A — institución estatal'
+      descripcion: 'Formación como Oficial o Suboficial de la Marina de Guerra del Perú.',
+      carreras: [
+        {
+          nombre: 'Oficial de la Marina de Guerra',
+          icono: '🚢',
+          descripcion: 'Comanda embarcaciones y dirige operaciones navales para la defensa marítima y fluvial del Perú.',
+          campoLaboral: ['Defensa marítima', 'Operaciones navales', 'Guardacostas', 'Puertos', 'Misiones ONU'],
+          especializaciones: ['Navegación', 'Ingeniería naval', 'Infantería de Marina', 'Inteligencia naval'],
+          instituciones: ['Escuela Naval del Perú']
+        },
+        {
+          nombre: 'Suboficial de la Marina de Guerra',
+          icono: '⚓',
+          descripcion: 'Apoya operaciones navales y de guardacostas en funciones técnicas y operativas.',
+          campoLaboral: ['Operaciones navales', 'Mantenimiento naval', 'Guardacostas', 'Logística', 'Comunicaciones'],
+          especializaciones: ['Mecánica naval', 'Electricidad', 'Comunicaciones', 'Sanidad', 'Artillería naval'],
+          instituciones: ['CITEN - Centro de Instrucción Técnica Naval']
+        }
+      ]
     },
     {
       categoria: 'FUERZAS_ARMADAS', subcategoria: 'Fuerza Aérea',
       icono: '✈️', dims: ['DIM-05', 'DIM-06'], duracion: '3-5 años',
-      descripcion: 'Formación como Oficial o Suboficial de la Fuerza Aérea del Perú. Protección del espacio aéreo.',
-      carreras: ['Oficial de la FAP', 'Suboficial de la FAP'],
-      campoLaboral: ['Aviación militar', 'Defensa aérea', 'Logística aérea', 'Rescate y emergencias'],
-      especializaciones: ['Piloto militar', 'Control aéreo', 'Mantenimiento aeronáutico', 'Inteligencia aérea'],
-      instituciones: ['Escuela de Oficiales FAP', 'ESOFA', 'EMGFA'],
-      sueldoJunior: 'S/ 2,500 – 4,000',
-      sueldoSenior: 'S/ 6,000 – 12,000',
-      costoNacional: 'Gratuito con beca del Estado peruano',
-      costoPrivada: 'N/A — institución estatal'
+      descripcion: 'Formación como Oficial o Suboficial de la Fuerza Aérea del Perú.',
+      carreras: [
+        {
+          nombre: 'Oficial de la FAP',
+          icono: '🛩️',
+          descripcion: 'Pilotea aeronaves militares y lidera operaciones aéreas de defensa, reconocimiento y apoyo humanitario.',
+          campoLaboral: ['Aviación militar', 'Defensa aérea', 'Logística aérea', 'Rescate y emergencias', 'Misiones ONU'],
+          especializaciones: ['Piloto militar', 'Control aéreo', 'Inteligencia aérea', 'Ingeniería aeronáutica'],
+          instituciones: ['Escuela de Oficiales FAP']
+        },
+        {
+          nombre: 'Suboficial de la FAP',
+          icono: '🔧',
+          descripcion: 'Mantiene y opera equipos aeronáuticos, sistemas de armamento y apoyo a las operaciones aéreas.',
+          campoLaboral: ['Mantenimiento aeronáutico', 'Control de tráfico aéreo', 'Logística aérea', 'Comunicaciones'],
+          especializaciones: ['Mantenimiento aeronáutico', 'Electrónica', 'Armamento', 'Meteorología'],
+          instituciones: ['ESOFA - Escuela de Suboficiales FAP']
+        }
+      ]
     },
 
-    // ── POLICIAL ──────────────────────────────────────────
+    // ══════════════════════════════════════════════════════════
+    //  POLICIAL
+    // ══════════════════════════════════════════════════════════
     {
       categoria: 'POLICIAL', subcategoria: 'Oficiales PNP',
       icono: '👮', dims: ['DIM-04', 'DIM-05', 'DIM-06'], duracion: '5 años',
-      descripcion: 'Lidera unidades policiales para garantizar la seguridad ciudadana, investigar delitos y mantener el orden público.',
-      carreras: ['Oficial de la Policía Nacional del Perú'],
-      campoLaboral: ['Seguridad ciudadana', 'Investigación criminal', 'Orden público', 'Lucha contra el crimen organizado'],
-      especializaciones: ['Investigación criminal', 'Orden público', 'Inteligencia policial', 'Tránsito'],
-      instituciones: ['Escuela de Oficiales PNP (EO-PNP)'],
-      sueldoJunior: 'S/ 2,200 – 3,500',
-      sueldoSenior: 'S/ 5,000 – 10,000',
-      costoNacional: 'Gratuito con beca del Estado peruano',
-      costoPrivada: 'N/A — institución estatal'
+      descripcion: 'Formación como Oficial de la Policía Nacional del Perú para liderar unidades policiales.',
+      carreras: [
+        {
+          nombre: 'Oficial de la Policía Nacional del Perú',
+          icono: '🚔',
+          descripcion: 'Lidera unidades policiales para garantizar la seguridad ciudadana, investigar delitos y mantener el orden público.',
+          campoLaboral: ['Seguridad ciudadana', 'Investigación criminal', 'Orden público', 'Inteligencia policial', 'Tránsito'],
+          especializaciones: ['Investigación criminal', 'Orden público', 'Inteligencia policial', 'Tránsito', 'Antidrogas'],
+          instituciones: ['Escuela de Oficiales PNP (EO-PNP)']
+        }
+      ]
     },
     {
       categoria: 'POLICIAL', subcategoria: 'Suboficiales PNP',
-      icono: '🚔', dims: ['DIM-04', 'DIM-05', 'DIM-06'], duracion: '3 años',
-      descripcion: 'Ejecuta operaciones de patrullaje, control de tránsito y seguridad comunitaria en contacto directo con la ciudadanía.',
-      carreras: ['Suboficial de la Policía Nacional del Perú'],
-      campoLaboral: ['Patrullaje urbano', 'Control de tránsito', 'Seguridad comunitaria', 'Protección de instalaciones'],
-      especializaciones: ['Patrullaje', 'Tránsito', 'Criminalística', 'Protección de personas'],
-      instituciones: ['Escuelas Técnico Superiores PNP (ETS-PNP)'],
-      sueldoJunior: 'S/ 1,800 – 2,800',
-      sueldoSenior: 'S/ 3,500 – 6,000',
-      costoNacional: 'Gratuito con beca del Estado peruano',
-      costoPrivada: 'N/A — institución estatal'
+      icono: '🚓', dims: ['DIM-04', 'DIM-05', 'DIM-06'], duracion: '3 años',
+      descripcion: 'Formación como Suboficial de la Policía Nacional del Perú para operaciones de patrullaje y seguridad.',
+      carreras: [
+        {
+          nombre: 'Suboficial de la Policía Nacional del Perú',
+          icono: '🛡️',
+          descripcion: 'Ejecuta operaciones de patrullaje, control de tránsito y seguridad comunitaria en contacto directo con la ciudadanía.',
+          campoLaboral: ['Patrullaje urbano', 'Control de tránsito', 'Seguridad comunitaria', 'Protección de instalaciones'],
+          especializaciones: ['Patrullaje', 'Tránsito', 'Criminalística', 'Protección de personas', 'Serenazgo'],
+          instituciones: ['Escuelas Técnico Superiores PNP (ETS-PNP)']
+        }
+      ]
     }
   ];
-
   /* ============================================================
      MAPEO: categoría → dimensión dominante (para R-010 default)
   ============================================================ */
