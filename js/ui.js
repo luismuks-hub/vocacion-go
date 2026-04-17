@@ -347,440 +347,84 @@ const VocaUI = (() => {
     });
   }
 
-  function _renderCarrerasResumen(carreras) {
+  function _renderCarrerasResumen(subcategorias) {
     const container = document.getElementById('carreras-resumen');
     if (!container) return;
-
-    container.innerHTML = '';
-    carreras.slice(0, 3).forEach((c, idx) => {
-      const cardId = `carrera-card-p6-${idx}`;
-      const detailId = `carrera-detail-p6-${idx}`;
-
-      // Colores por categoría
-      const catColor = {
-        UNIVERSITARIA:'#A855F7', UNIVERSITARIA_SOCIAL:'#A855F7',
-        UNIVERSITARIA_CIENCIAS:'#00C8FF', UNIVERSITARIA_TECNICA:'#A855F7',
-        TECNICA:'#22C55E', FUERZAS_ARMADAS:'#FF6B00', POLICIAL:'#FF0099'
-      }[c.categoria] || '#A855F7';
-
-      container.innerHTML += `
-        <div id="${cardId}" class="carrera-item-expandible">
-          <!-- Cabecera siempre visible -->
-          <div class="carrera-item-hdr" onclick="toggleCarreraP6('${detailId}', '${cardId}')">
-            <div class="carrera-ico" style="background:rgba(139,0,255,0.15);border:1px solid rgba(139,0,255,0.3)">${c.icono}</div>
-            <div class="carrera-info">
-              <div class="carrera-name">${c.nombre}</div>
-              <div class="carrera-inst">${(c.instituciones||[]).slice(0,3).join(' · ')}</div>
-            </div>
-            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
-              <span style="font-size:12px;color:var(--lime);font-weight:900;font-family:var(--font-display)">${c.afinidad}%</span>
-              <span style="font-size:10px;color:var(--text-3)">${c.duracion}</span>
-              <span class="expand-arrow" id="arr-${detailId}" style="font-size:11px;color:var(--text-3);transition:transform .2s">▼</span>
-            </div>
-          </div>
-
-          <!-- Detalle expandible -->
-          <div id="${detailId}" class="carrera-detalle" style="display:none">
-            <div style="height:1px;background:var(--border);margin:8px 0"></div>
-
-            <!-- Barra de afinidad -->
-            <div style="margin-bottom:10px">
-              <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-2);margin-bottom:4px">
-                <span>Afinidad con tu perfil</span>
-                <span style="color:${catColor};font-weight:900">${c.afinidad}%</span>
-              </div>
-              <div style="height:5px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden">
-                <div style="height:5px;width:${c.afinidad}%;background:${catColor};border-radius:3px"></div>
-              </div>
-            </div>
-
-            ${c.descripcion ? `
-            <p style="font-size:12px;color:var(--text-2);line-height:1.6;margin-bottom:10px">${c.descripcion}</p>` : ''}
-
-            <!-- Campo laboral -->
-            ${c.campoLaboral?.length ? `
-            <div class="det-bloque" style="border-left:3px solid var(--blue)">
-              <div style="font-size:10px;font-weight:900;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">🏢 Campo laboral</div>
-              <div style="display:flex;flex-wrap:wrap;gap:4px">
-                ${c.campoLaboral.map(cl=>`<span class="campo-tag">${cl}</span>`).join('')}
-              </div>
-            </div>` : ''}
-
-            <!-- Especializaciones -->
-            ${c.especializaciones?.length ? `
-            <div class="det-bloque" style="border-left:3px solid var(--purple-mid)">
-              <div style="font-size:10px;font-weight:900;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">🎯 Especializaciones</div>
-              <div style="display:flex;flex-wrap:wrap;gap:4px">
-                ${c.especializaciones.map(e=>`<span class="campo-tag" style="background:var(--purple-bg);color:var(--purple-mid)">${e}</span>`).join('')}
-              </div>
-            </div>` : ''}
-
-            <!-- Sueldo -->
-            ${c.sueldoJunior ? `
-            <div class="det-bloque" style="border-left:3px solid #44FF88">
-              <div style="font-size:10px;font-weight:900;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">💰 Sueldo referencial</div>
-              <div style="font-size:12px;color:var(--text-2);line-height:1.8">
-                <span style="color:var(--text-3)">Junior:</span> <span style="color:#44FF88;font-weight:700">${c.sueldoJunior}</span><br>
-                <span style="color:var(--text-3)">Senior:</span> <span style="color:var(--lime);font-weight:700">${c.sueldoSenior||''}</span>
-              </div>
-            </div>` : ''}
-
-            <!-- Instituciones -->
-            ${c.instituciones?.length ? `
-            <div class="det-bloque" style="border-left:3px solid var(--orange)">
-              <div style="font-size:10px;font-weight:900;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">🎓 Instituciones en Perú</div>
-              <div style="display:flex;flex-wrap:wrap;gap:4px">
-                ${c.instituciones.map(i=>`<span class="inst-pill">${i}</span>`).join('')}
-              </div>
-            </div>` : ''}
-
-            <!-- Costos -->
-            ${c.costoNacional ? `
-            <div class="det-bloque" style="border-left:3px solid var(--pink)">
-              <div style="font-size:10px;font-weight:900;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">💳 Costos</div>
-              <div style="font-size:11px;color:var(--text-2);line-height:1.8">
-                <span style="color:var(--pink);font-weight:700">Nacional:</span> ${c.costoNacional}<br>
-                <span style="color:var(--pink);font-weight:700">Privada:</span> ${c.costoPrivada||''}
-              </div>
-            </div>` : ''}
-
-            <button onclick="VocaApp.irA(7)" style="width:100%;margin-top:8px;padding:10px;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;border:none;border-radius:var(--radius);font-family:var(--font-display);font-size:13px;font-weight:900;cursor:pointer">
-              Ver todas las carreras ›
-            </button>
-          </div>
-        </div>`;
-    });
-  }
-
-  /* ============================================================
-     PANTALLA 8 — COMPARTIR
-  ============================================================ */
-  function _postRenderCompartir(estado) {
-    const r = estado.resultado;
-    const u = estado.usuario;
-    if (!r || !u) return;
-
-    // Nombre en el reporte
-    _setText('report-name', `${u.nombre} ${u.apellido}`);
-    _setText('report-conf-text', `Nivel de confianza: ${r.confianza} · ${u.region}`);
-
-    // Mini-barras del reporte
-    const container = document.getElementById('rdims8');
-    if (container) {
-      container.innerHTML = '';
-      VocaData.getDimensiones().forEach(dim => {
-        const puntaje = r.puntajesNorm[dim.id] || 0;
-        const h = Math.round((puntaje / 100) * 42);
-        container.innerHTML += `
-          <div class="rdim">
-            <div class="rdim-bar-wrap">
-              <div class="rdim-bar" style="height:${h}px;background:${dim.color}"></div>
-            </div>
-            <div class="rdim-score" style="color:${dim.color}">${puntaje}</div>
-            <div class="rdim-name">${dim.nombreCorto}</div>
-          </div>`;
-      });
-    }
-
-    // Fecha
-    _setText('rdate8', 'Evaluado el ' + new Date().toLocaleDateString('es-PE', {
-      day: '2-digit', month: 'long', year: 'numeric'
-    }));
-
-    // Enlace
-    const enlace = VocaApp.generarEnlaceCompartir();
-    _setText('link-url-text', enlace || 'vocatest.local/resultado');
-  }
-
-  /* ============================================================
-     PANTALLA 9 — ADMIN
-  ============================================================ */
-  function renderAdmin(evaluaciones, stats) {
-    _renderMetricas(stats);
-    _renderGraficaBarras(evaluaciones);
-    _renderGraficaDonut(stats.porCategoria);
-    renderListaEvaluaciones(evaluaciones);
-  }
-
-  function _renderMetricas(stats) {
-    _setText('adm-total',       stats.total);
-    _setText('adm-tiempo',      stats.tiempoPromedioMin + "'");
-    _setText('adm-completitud', stats.tasaCompletitud + '%');
-    _setText('adm-regiones',    stats.regionesActivas);
-  }
-
-  function _renderGraficaBarras(evaluaciones) {
-    const cont = document.getElementById('adm-bars-chart');
-    if (!cont) return;
-    const semanas = _agruparPorSemana(evaluaciones, 6);
-    const max = Math.max(...semanas.map(s => s.count), 1);
-    const H = 110, barW = 28, gap = 12, padL = 28, padB = 22;
-    const totalW = semanas.length * (barW + gap) - gap + padL + 16;
-
-    const ns = 'http://www.w3.org/2000/svg';
-    let old = cont.querySelector('svg');
-    if (old) old.remove();
-
-    const svg = document.createElementNS(ns, 'svg');
-    svg.setAttribute('viewBox', `0 0 ${totalW} ${H + padB}`);
-    svg.setAttribute('width', '100%');
-
-    // Líneas de referencia
-    [0, 0.5, 1].forEach(frac => {
-      const y = H - frac * H;
-      const line = document.createElementNS(ns, 'line');
-      line.setAttribute('x1', padL); line.setAttribute('x2', totalW - 8);
-      line.setAttribute('y1', y);    line.setAttribute('y2', y);
-      line.setAttribute('stroke', 'rgba(255,255,255,0.08)'); line.setAttribute('stroke-width','1');
-      svg.appendChild(line);
-      const t = document.createElementNS(ns, 'text');
-      t.setAttribute('x', padL - 4); t.setAttribute('y', y + 4);
-      t.setAttribute('text-anchor','end'); t.setAttribute('fill','rgba(255,255,255,0.35)');
-      t.setAttribute('font-size','8'); t.setAttribute('font-family','Nunito,sans-serif');
-      t.textContent = Math.round(frac * max);
-      svg.appendChild(t);
-    });
-
-    semanas.forEach((s, i) => {
-      const x = padL + i * (barW + gap);
-      const bH = max > 0 ? Math.max(2, (s.count / max) * H) : 2;
-      const by = H - bH;
-
-      const rect = document.createElementNS(ns, 'rect');
-      rect.setAttribute('x', x); rect.setAttribute('y', by);
-      rect.setAttribute('width', barW); rect.setAttribute('height', bH);
-      rect.setAttribute('rx', '4'); rect.setAttribute('fill', '#8B00FF');
-      svg.appendChild(rect);
-
-      const val = document.createElementNS(ns, 'text');
-      val.setAttribute('x', x + barW/2); val.setAttribute('y', by - 4);
-      val.setAttribute('text-anchor','middle'); val.setAttribute('fill','#C8FF00');
-      val.setAttribute('font-size','9'); val.setAttribute('font-weight','700');
-      val.setAttribute('font-family','Nunito,sans-serif');
-      val.textContent = s.count;
-      svg.appendChild(val);
-
-      const lbl = document.createElementNS(ns, 'text');
-      lbl.setAttribute('x', x + barW/2); lbl.setAttribute('y', H + 14);
-      lbl.setAttribute('text-anchor','middle'); lbl.setAttribute('fill','rgba(255,255,255,0.4)');
-      lbl.setAttribute('font-size','8'); lbl.setAttribute('font-family','Nunito,sans-serif');
-      lbl.textContent = s.label;
-      svg.appendChild(lbl);
-    });
-
-    cont.innerHTML = '';
-    cont.appendChild(svg);
-  }
-
-  function _renderGraficaDonut(porCategoria) {
-    const cont = document.getElementById('adm-donut');
-    if (!cont) return;
-
-    const cats = Object.entries(porCategoria).map(([cat, count]) => {
-      const etq = VocaData.getEtiquetaCategoria(cat);
-      return { label: etq.label, count, color: etq.color };
-    }).filter(c => c.count > 0);
-
-    const total = cats.reduce((s, c) => s + c.count, 0);
-
-    // Leyenda
-    const legend = document.getElementById('adm-legend');
-    if (legend) {
-      legend.innerHTML = cats.map(c => `
-        <div class="leg-item">
-          <div class="leg-dot" style="background:${c.color}"></div>
-          <span style="flex:1;font-size:11px">${c.label}</span>
-          <span class="leg-pct">${c.count}</span>
-        </div>`).join('');
-    }
-
-    // Total en centro del donut
-    _setText('adm-total-donut', total);
-
-    if (!total) { cont.innerHTML = ''; return; }
-
-    // SVG donut
-    const ns = 'http://www.w3.org/2000/svg';
-    const SZ = 100, CX = 50, CY = 50, R = 40, r = 28;
-
-    let old = cont.querySelector('svg');
-    if (old) old.remove();
-
-    const svg = document.createElementNS(ns, 'svg');
-    svg.setAttribute('viewBox', `0 0 ${SZ} ${SZ}`);
-    svg.setAttribute('width', '100%');
-
-    let startAngle = -Math.PI / 2;
-    cats.forEach(cat => {
-      const frac = cat.count / total;
-      const endAngle = startAngle + frac * Math.PI * 2;
-
-      const x1 = CX + R * Math.cos(startAngle), y1 = CY + R * Math.sin(startAngle);
-      const x2 = CX + R * Math.cos(endAngle),   y2 = CY + R * Math.sin(endAngle);
-      const xi1 = CX + r * Math.cos(endAngle),   yi1 = CY + r * Math.sin(endAngle);
-      const xi2 = CX + r * Math.cos(startAngle), yi2 = CY + r * Math.sin(startAngle);
-      const large = frac > 0.5 ? 1 : 0;
-
-      const path = document.createElementNS(ns, 'path');
-      path.setAttribute('d',
-        `M${x1.toFixed(2)},${y1.toFixed(2)} A${R},${R} 0 ${large},1 ${x2.toFixed(2)},${y2.toFixed(2)} L${xi1.toFixed(2)},${yi1.toFixed(2)} A${r},${r} 0 ${large},0 ${xi2.toFixed(2)},${yi2.toFixed(2)} Z`
-      );
-      path.setAttribute('fill', cat.color);
-      const title = document.createElementNS(ns, 'title');
-      title.textContent = `${cat.label}: ${cat.count}`;
-      path.appendChild(title);
-      svg.appendChild(path);
-
-      startAngle = endAngle;
-    });
-
-    cont.innerHTML = '';
-    cont.appendChild(svg);
-  }
-
-  function renderListaEvaluaciones(evaluaciones) {
-    const container = document.getElementById('eval-list9');
-    if (!container) return;
-
-    if (!evaluaciones.length) {
-      container.innerHTML = '<div class="empty-state"><div class="empty-ico">📋</div><p>No hay evaluaciones registradas aún.</p></div>';
+    if (!subcategorias || !subcategorias.length) {
+      container.innerHTML = '<p style="font-size:12px;color:var(--text-3);text-align:center;padding:12px">No hay carreras disponibles.</p>';
       return;
     }
 
-    container.innerHTML = evaluaciones.map(ev => {
-      const nombre = `${ev.usuario?.nombre || ''} ${ev.usuario?.apellido || ''}`.trim() || 'Sin nombre';
-      const ini = nombre.split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2);
-      const cat = ev.resultado?.categoria || 'INDETERMINADO';
-      const etq = VocaData.getEtiquetaCategoria(cat);
-      const meta = `${ev.usuario?.edad || '?'} años · ${ev.usuario?.region || 'Sin región'}`;
-      const fecha = new Date(ev.fechaCreacion).toLocaleDateString('es-PE', { day: '2-digit', month: 'short' });
+    const CAT_COLOR = {
+      UNIVERSITARIA:'#A855F7', UNIVERSITARIA_SOCIAL:'#A855F7',
+      UNIVERSITARIA_CIENCIAS:'#00C8FF', UNIVERSITARIA_TECNICA:'#A855F7',
+      TECNICA:'#22C55E', FUERZAS_ARMADAS:'#F59E0B', POLICIAL:'#EC4899',
+      MULTIPLE:'#6B7280', INDETERMINADO:'#6B7280', DEFAULT:'#6B7280'
+    };
+
+    container.innerHTML = subcategorias.map((sc, idx) => {
+      const color = CAT_COLOR[sc.categoria] || '#A855F7';
+      const detailId = `sc-detail-p6-${idx}`;
+      const carrerasStr = (sc.carreras || []).join(' · ');
 
       return `
-        <div class="eval-item2">
-          <div class="eval-av" style="background:${etq.color}">${ini}</div>
-          <div class="eval-inf">
-            <div class="eval-name2">${nombre}</div>
-            <div class="eval-meta2">${meta} · ${fecha}</div>
+        <div class="subcat-block-p6" style="border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;margin-bottom:8px">
+          <!-- Cabecera de subcategoría -->
+          <div class="subcat-hdr-p6" onclick="toggleSubcatP6('${detailId}', this)"
+            style="display:flex;align-items:center;gap:8px;padding:10px 13px;
+              background:rgba(${_hexToRgb(color)},0.12);cursor:pointer">
+            <span style="font-size:18px">${sc.icono}</span>
+            <div style="flex:1;min-width:0">
+              <div style="font-family:var(--font-display);font-size:13px;font-weight:900;color:${color}">${sc.subcategoria}</div>
+              <div style="font-size:10px;color:var(--text-3);margin-top:1px">${(sc.carreras||[]).length} carrera${(sc.carreras||[]).length!==1?'s':''} · Afinidad ${sc.afinidad}%</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+              <span style="font-family:var(--font-display);font-size:12px;font-weight:900;color:var(--lime)">${sc.afinidad}%</span>
+              <span class="subcat-caret" style="font-size:10px;color:var(--text-3);transition:transform .2s">${idx===0?'▲':'▼'}</span>
+            </div>
           </div>
-          <span class="eval-badge2" style="background:${etq.fondo};color:${etq.color}">${etq.label}</span>
-          <button onclick="VocaApp.eliminarEvaluacion('${ev.id}')" class="btn-del" title="Eliminar">✕</button>
+          <!-- Detalle expandible -->
+          <div id="${detailId}" style="display:${idx===0?'block':'none'}">
+            <div style="padding:10px 13px;border-top:1px solid rgba(255,255,255,0.06);background:var(--bg-card2)">
+              <!-- Carreras listadas -->
+              <div style="font-size:10px;font-weight:900;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Carreras incluidas</div>
+              <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px">
+                ${(sc.carreras||[]).map(c=>`<span style="font-size:11px;padding:3px 9px;background:rgba(${_hexToRgb(color)},0.12);color:${color};border-radius:6px;border:1px solid rgba(${_hexToRgb(color)},0.25)">${c}</span>`).join('')}
+              </div>
+              <!-- Barra de afinidad -->
+              <div style="margin-bottom:10px">
+                <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-3);margin-bottom:3px">
+                  <span>Afinidad con tu perfil</span><span style="color:${color};font-weight:900">${sc.afinidad}%</span>
+                </div>
+                <div style="height:4px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden">
+                  <div style="height:4px;width:${sc.afinidad}%;background:${color};border-radius:2px"></div>
+                </div>
+              </div>
+              ${sc.campoLaboral?.length?`
+              <div style="font-size:10px;font-weight:900;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Campo laboral</div>
+              <div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px">
+                ${sc.campoLaboral.map(cl=>`<span class="campo-tag">${cl}</span>`).join('')}
+              </div>`:''}
+              ${sc.sueldoJunior?`
+              <div style="font-size:10px;font-weight:900;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Sueldo referencial</div>
+              <div style="font-size:11px;color:var(--text-2);line-height:1.8">
+                <span style="color:var(--text-3)">Junior:</span> <span style="color:#44FF88;font-weight:700">${sc.sueldoJunior}</span><br>
+                <span style="color:var(--text-3)">Senior:</span> <span style="color:var(--lime);font-weight:700">${sc.sueldoSenior}</span>
+              </div>`:''}
+              <button onclick="VocaApp.irA(7)" style="width:100%;margin-top:10px;padding:9px;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;border:none;border-radius:var(--radius);font-family:var(--font-display);font-size:12px;font-weight:900;cursor:pointer">
+                Ver detalle completo ›
+              </button>
+            </div>
+          </div>
         </div>`;
     }).join('');
   }
 
-  /* ============================================================
-     LIMPIEZA DE FORMULARIOS — para nueva evaluación
-  ============================================================ */
-  function limpiarFormularios() {
-    // P2 — desmarcar checkboxes de consentimiento
-    ['c1','c2','c3'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.checked = false;
-    });
-    toggleBotonConsentimiento(false);
-
-    // P3 — limpiar campos de registro
-    ['f-nombre','f-apellido','f-edad'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.value = '';
-    });
-    ['f-grado','f-region','f-inst'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.selectedIndex = 0;
-    });
-    document.querySelectorAll('input[name="gen"]').forEach(r => r.checked = false);
-    toggleBotonRegistro(false);
-
-    // P4 — reconstruir Likert vacío y resetear estado visual
-    _reconstruirLikert(null, null);
-    const btnNext = document.getElementById('btn-next');
-    if (btnNext) btnNext.classList.remove('ready', 'pulse');
-    const selMsg = document.getElementById('sel-msg');
-    if (selMsg) {
-      selMsg.textContent = 'Selecciona una opción para continuar';
-      selMsg.className = 'sel-msg';
-    }
-    const dotsRow = document.getElementById('dots-row');
-    if (dotsRow) dotsRow.innerHTML = '';
+  function _hexToRgb(hex) {
+    const r = parseInt(hex.slice(1,3),16);
+    const g = parseInt(hex.slice(3,5),16);
+    const b = parseInt(hex.slice(5,7),16);
+    return `${r},${g},${b}`;
   }
 
-  /* ============================================================
-     FORMULARIOS — toggles de botones
-  ============================================================ */
-  function toggleBotonConsentimiento(habilitado) {
-    const btn = document.getElementById('btn-consent');
-    if (btn) btn.classList.toggle('disabled', !habilitado);
-  }
 
-  function toggleBotonRegistro(habilitado) {
-    const btn = document.getElementById('btn-reg');
-    if (btn) btn.classList.toggle('disabled', !habilitado);
-  }
-
-  /* ============================================================
-     TOAST GLOBAL
-  ============================================================ */
-  function showToast(mensaje, duracion = 2500) {
-    const toast = document.getElementById('toast-main');
-    if (!toast) return;
-    toast.textContent = mensaje;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), duracion);
-  }
-
-  /* ============================================================
-     UTILIDADES
-  ============================================================ */
-  function scrollTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function _setText(id, texto) {
-    const el = document.getElementById(id);
-    if (el) el.textContent = texto;
-  }
-
-  function _setStyle(id, prop, valor) {
-    const el = document.getElementById(id);
-    if (el) el.style[prop] = valor;
-  }
-
-  function _agruparPorSemana(evaluaciones, numSemanas) {
-    const ahora = new Date();
-    const semanas = [];
-
-    for (let i = numSemanas - 1; i >= 0; i--) {
-      const inicio = new Date(ahora);
-      inicio.setDate(ahora.getDate() - (i + 1) * 7);
-      const fin = new Date(ahora);
-      fin.setDate(ahora.getDate() - i * 7);
-
-      const count = evaluaciones.filter(ev => {
-        const fecha = new Date(ev.fechaCreacion);
-        return fecha >= inicio && fecha < fin;
-      }).length;
-
-      semanas.push({ label: `Sem ${numSemanas - i}`, count });
-    }
-    return semanas;
-  }
-
-  /* ============================================================
-     API PÚBLICA
-  ============================================================ */
-  return {
-    renderPantalla,
-    renderPregunta,
-    actualizarSeleccion,
-    actualizarMensajeSeleccion,
-    renderAdmin,
-    renderListaEvaluaciones,
-    toggleBotonConsentimiento,
-    toggleBotonRegistro,
-    limpiarFormularios,
-    showToast,
-    scrollTop,
-    VERSION: '1.0.0'
-  };
-
-})();

@@ -139,38 +139,24 @@ const VocaEngine = (() => {
      Input:  categoria = 'UNIVERSITARIA', puntajesNorm, limite
      Output: array de carreras ordenadas por afinidad calculada
   ============================================================ */
-  function obtenerCarrerasRecomendadas(categoria, puntajesNorm, limite = 5) {
-    // Normalizar categorías compuestas para buscar en catálogo
-    const catBusqueda = {
-      'UNIVERSITARIA':          'UNIVERSITARIA',
-      'UNIVERSITARIA_TECNICA':  'UNIVERSITARIA',
-      'UNIVERSITARIA_SOCIAL':   'UNIVERSITARIA',
-      'UNIVERSITARIA_CIENCIAS': 'UNIVERSITARIA',
-      'TECNICA':                'TECNICA',
-      'FUERZAS_ARMADAS':        'FUERZAS_ARMADAS',
-      'POLICIAL':               'POLICIAL',
-      'MULTIPLE':               null,
-      'INDETERMINADO':          null,
-      'DEFAULT':                null
-    };
+  function obtenerCarrerasRecomendadas(categoria, puntajesNorm, limite = 10) {
+    // Obtener subcategorías válidas para esta categoría resultante
+    const subcats = VocaData.getSubcatsPorCategoria(categoria);
 
-    const catFinal = catBusqueda[categoria];
+    // Filtrar el catálogo según las subcategorías válidas
+    let subcategorias = VocaData.getCatalogoPorSubcats(subcats);
 
-    let carreras = catFinal
-      ? VocaData.getCatalogoPorCategoria(catFinal)
-      : VocaData.getCatalogo();
-
-    // Calcular % de afinidad para cada carrera según sus dimensiones relevantes
-    carreras = carreras.map(carrera => {
-      const puntajesDims = carrera.dims.map(d => puntajesNorm[d] || 0);
+    // Calcular afinidad de cada subcategoría según sus dims relevantes
+    subcategorias = subcategorias.map(subcat => {
+      const puntajesDims = subcat.dims.map(d => puntajesNorm[d] || 0);
       const afinidad = Math.round(
         puntajesDims.reduce((a, b) => a + b, 0) / puntajesDims.length
       );
-      return { ...carrera, afinidad };
+      return { ...subcat, afinidad };
     });
 
-    // Ordenar por afinidad descendente y limitar
-    return carreras
+    // Ordenar por afinidad descendente
+    return subcategorias
       .sort((a, b) => b.afinidad - a.afinidad)
       .slice(0, limite);
   }

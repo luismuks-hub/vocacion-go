@@ -273,196 +273,140 @@ const VocaData = (() => {
   ];
 
   /* ============================================================
-     CATÁLOGO DE CARRERAS — Campos completos
-     Fuente: Hoja 5 - Catálogo Carreras del Excel + enriquecido
+     CATÁLOGO DE CARRERAS
+     Fuente: Hoja 5 - Catálogo Carreras del Excel
+     Estructura: por SUBCATEGORÍA, con array de carreras dentro.
+     Cada subcategoría tiene sus propias dims, instituciones, etc.
   ============================================================ */
   const CATALOGO = [
 
-    // ── UNIVERSITARIA — Ciencias e Ingeniería ──
+    // ── UNIVERSITARIA ─────────────────────────────────────
     {
       categoria: 'UNIVERSITARIA', subcategoria: 'Ciencias e Ingeniería',
-      nombre: 'Ingeniería de Sistemas', icono: '💻',
-      dims: ['DIM-01', 'DIM-03'], duracion: '5 años',
-      descripcion: 'Diseña, desarrolla y gestiona sistemas de información, software y redes. Alta demanda en el mercado laboral peruano y latinoamericano.',
-      campoLaboral: ['Empresas TI', 'Consultoría tecnológica', 'Sector público', 'Emprendimiento', 'Banca y finanzas'],
-      especializaciones: ['Ciberseguridad', 'Inteligencia Artificial', 'Desarrollo Web', 'Gestión de Proyectos TI'],
-      instituciones: ['UNMSM', 'UNI', 'PUCP', 'UPC', 'UNSA'],
-      sueldoJunior: 'S/ 2,500 – 4,000',
-      sueldoSenior: 'S/ 8,000 – 18,000',
-      costoNacional: 'Matrícula S/ 50 – 150 | Ciclo S/ 0 (gratuita)',
-      costoPrivada: 'Matrícula S/ 800 – 2,000 | Ciclo S/ 4,000 – 9,000'
-    },
-    {
-      categoria: 'UNIVERSITARIA', subcategoria: 'Ciencias e Ingeniería',
-      nombre: 'Ingeniería Civil', icono: '🏗️',
-      dims: ['DIM-01', 'DIM-03'], duracion: '5 años',
-      descripcion: 'Planifica, diseña y supervisa obras de infraestructura: edificios, carreteras, puentes y sistemas de agua.',
-      campoLaboral: ['Construcción privada', 'Obras públicas', 'Consultoría estructural', 'Minería', 'Urbanismo'],
-      especializaciones: ['Estructuras', 'Geotecnia', 'Hidráulica', 'Transporte y vías'],
-      instituciones: ['UNI', 'PUCP', 'UNMSM', 'UPC', 'UNSA'],
+      icono: '⚙️', dims: ['DIM-01', 'DIM-03'], duracion: '5 años',
+      descripcion: 'Formación universitaria en ingeniería y tecnología aplicada. Amplia demanda en el mercado laboral peruano.',
+      carreras: ['Ingeniería de Sistemas', 'Ingeniería Civil', 'Ingeniería Industrial', 'Ingeniería Ambiental', 'Ingeniería Mecatrónica'],
+      campoLaboral: ['Empresas privadas', 'Consultoría', 'Sector público', 'Emprendimiento', 'Minería'],
+      especializaciones: ['Ciberseguridad', 'Inteligencia Artificial', 'Gestión de Proyectos', 'Estructuras', 'Automatización'],
+      instituciones: ['UNMSM', 'UNI', 'PUCP', 'UNSA', 'UPC'],
       sueldoJunior: 'S/ 2,500 – 4,500',
-      sueldoSenior: 'S/ 7,000 – 15,000',
-      costoNacional: 'Matrícula S/ 50 – 150 | Ciclo S/ 0 (gratuita)',
-      costoPrivada: 'Matrícula S/ 800 – 2,000 | Ciclo S/ 4,500 – 9,500'
+      sueldoSenior: 'S/ 7,000 – 18,000',
+      costoNacional: 'Matrícula S/ 50 – 150 | Ciclo gratuito',
+      costoPrivada: 'Matrícula S/ 800 – 2,000 | Ciclo S/ 4,000 – 9,500'
     },
-    {
-      categoria: 'UNIVERSITARIA', subcategoria: 'Ciencias e Ingeniería',
-      nombre: 'Ingeniería Industrial', icono: '⚙️',
-      dims: ['DIM-01', 'DIM-03'], duracion: '5 años',
-      descripcion: 'Optimiza procesos productivos, gestiona recursos y mejora la eficiencia en empresas de cualquier sector.',
-      campoLaboral: ['Manufactura', 'Logística y cadena de suministro', 'Consultoría', 'Sector financiero', 'Agroindustria'],
-      especializaciones: ['Lean Manufacturing', 'Logística', 'Calidad', 'Seguridad industrial'],
-      instituciones: ['UNI', 'PUCP', 'UNMSM', 'UPC', 'USIL'],
-      sueldoJunior: 'S/ 2,500 – 4,000',
-      sueldoSenior: 'S/ 7,000 – 14,000',
-      costoNacional: 'Matrícula S/ 50 – 150 | Ciclo S/ 0 (gratuita)',
-      costoPrivada: 'Matrícula S/ 800 – 2,000 | Ciclo S/ 4,000 – 9,000'
-    },
-
-    // ── UNIVERSITARIA — Ciencias de la Salud ──
     {
       categoria: 'UNIVERSITARIA', subcategoria: 'Ciencias de la Salud',
-      nombre: 'Medicina Humana', icono: '🔬',
-      dims: ['DIM-01', 'DIM-03', 'DIM-04'], duracion: '7 años',
-      descripcion: 'Previene, diagnostica y trata enfermedades para salvar vidas y mejorar la salud de la población.',
-      campoLaboral: ['Hospitales y clínicas', 'Salud pública', 'Investigación científica', 'Docencia universitaria'],
-      especializaciones: ['Cardiología', 'Pediatría', 'Cirugía', 'Neurología', 'Psiquiatría'],
-      instituciones: ['UNMSM', 'UPCH (Cayetano Heredia)', 'USMP', 'UPC', 'Científica del Sur'],
-      sueldoJunior: 'S/ 3,500 – 5,000',
-      sueldoSenior: 'S/ 10,000 – 18,000',
+      icono: '🔬', dims: ['DIM-01', 'DIM-03', 'DIM-04'], duracion: '5-7 años',
+      descripcion: 'Carreras orientadas a la prevención, diagnóstico y tratamiento de enfermedades. Alta vocación de servicio.',
+      carreras: ['Medicina Humana', 'Enfermería', 'Psicología', 'Odontología', 'Nutrición'],
+      campoLaboral: ['Hospitales', 'Clínicas', 'Centros de salud', 'Investigación', 'Salud pública'],
+      especializaciones: ['Cardiología', 'Pediatría', 'Salud mental', 'Nutrición clínica', 'Odontología pediátrica'],
+      instituciones: ['UNMSM', 'UPCH (Cayetano Heredia)', 'USMP', 'URP', 'UPC'],
+      sueldoJunior: 'S/ 2,000 – 5,000',
+      sueldoSenior: 'S/ 8,000 – 18,000',
       costoNacional: 'Matrícula S/ 400 – 600 | Ciclo S/ 1,000 – 2,000',
       costoPrivada: 'Matrícula S/ 1,000 – 2,500 | Ciclo S/ 6,000 – 12,000'
     },
     {
-      categoria: 'UNIVERSITARIA', subcategoria: 'Ciencias de la Salud',
-      nombre: 'Psicología', icono: '🧠',
-      dims: ['DIM-01', 'DIM-04'], duracion: '5 años',
-      descripcion: 'Estudia el comportamiento humano y apoya la salud mental de personas, grupos y organizaciones.',
-      campoLaboral: ['Clínicas y hospitales', 'Empresas (RRHH)', 'Educación', 'ONGs', 'Consulta privada'],
-      especializaciones: ['Psicología clínica', 'Psicología organizacional', 'Neuropsicología', 'Psicología educativa'],
-      instituciones: ['PUCP', 'UNMSM', 'USMP', 'URP', 'UPC'],
-      sueldoJunior: 'S/ 1,800 – 3,000',
-      sueldoSenior: 'S/ 5,000 – 10,000',
-      costoNacional: 'Matrícula S/ 50 – 150 | Ciclo S/ 0 (gratuita)',
-      costoPrivada: 'Matrícula S/ 600 – 1,500 | Ciclo S/ 3,500 – 7,000'
-    },
-
-    // ── UNIVERSITARIA — Ciencias Sociales ──
-    {
       categoria: 'UNIVERSITARIA', subcategoria: 'Ciencias Sociales',
-      nombre: 'Derecho', icono: '⚖️',
-      dims: ['DIM-01', 'DIM-04'], duracion: '5 años',
-      descripcion: 'Interpreta y aplica las leyes para defender derechos, resolver conflictos y contribuir a la justicia.',
-      campoLaboral: ['Estudios jurídicos', 'Sector público', 'Empresa privada', 'Poder Judicial', 'ONGs'],
-      especializaciones: ['Derecho corporativo', 'Derecho penal', 'Derecho laboral', 'Derecho internacional'],
-      instituciones: ['PUCP', 'UNMSM', 'UNFV', 'URP', 'San Martín'],
-      sueldoJunior: 'S/ 2,000 – 3,500',
-      sueldoSenior: 'S/ 8,000 – 20,000',
-      costoNacional: 'Matrícula S/ 50 – 150 | Ciclo S/ 0 (gratuita)',
-      costoPrivada: 'Matrícula S/ 600 – 1,500 | Ciclo S/ 3,500 – 7,500'
+      icono: '⚖️', dims: ['DIM-01', 'DIM-04'], duracion: '5 años',
+      descripcion: 'Carreras centradas en el estudio de la sociedad, el derecho, la educación y la comunicación.',
+      carreras: ['Derecho', 'Educación', 'Trabajo Social', 'Sociología', 'Comunicaciones'],
+      campoLaboral: ['Sector público', 'ONGs', 'Medios de comunicación', 'Educación', 'Poder Judicial'],
+      especializaciones: ['Derecho corporativo', 'Derecho penal', 'Periodismo', 'Educación inicial', 'Políticas sociales'],
+      instituciones: ['UNMSM', 'PUCP', 'UNFV', 'UNSA', 'San Martín'],
+      sueldoJunior: 'S/ 1,800 – 3,500',
+      sueldoSenior: 'S/ 5,000 – 15,000',
+      costoNacional: 'Matrícula S/ 50 – 150 | Ciclo gratuito',
+      costoPrivada: 'Matrícula S/ 600 – 1,500 | Ciclo S/ 3,000 – 7,500'
     },
-    {
-      categoria: 'UNIVERSITARIA', subcategoria: 'Ciencias Sociales',
-      nombre: 'Educación', icono: '📚',
-      dims: ['DIM-01', 'DIM-04'], duracion: '5 años',
-      descripcion: 'Forma docentes capaces de guiar el aprendizaje y el desarrollo integral de estudiantes de todos los niveles.',
-      campoLaboral: ['Colegios nacionales', 'Colegios privados', 'Institutos', 'Sector público (MINEDU)'],
-      especializaciones: ['Educación Inicial', 'Educación Primaria', 'Matemáticas', 'Comunicación'],
-      instituciones: ['UNMSM', 'PUCP', 'UNE (La Cantuta)', 'UNFV', 'San Agustín'],
-      sueldoJunior: 'S/ 1,800 – 2,800',
-      sueldoSenior: 'S/ 4,000 – 8,000',
-      costoNacional: 'Matrícula S/ 50 – 100 | Ciclo S/ 0 (gratuita)',
-      costoPrivada: 'Matrícula S/ 400 – 1,000 | Ciclo S/ 2,500 – 5,000'
-    },
-
-    // ── UNIVERSITARIA — Ciencias Económicas ──
     {
       categoria: 'UNIVERSITARIA', subcategoria: 'Ciencias Económicas',
-      nombre: 'Administración de Empresas', icono: '📊',
-      dims: ['DIM-01', 'DIM-03'], duracion: '5 años',
-      descripcion: 'Gestiona recursos, lidera equipos y toma decisiones estratégicas para el crecimiento de organizaciones.',
-      campoLaboral: ['Banca y finanzas', 'Empresas privadas', 'Consultoría', 'Gobierno', 'Emprendimiento'],
-      especializaciones: ['Marketing', 'Finanzas', 'Recursos Humanos', 'Comercio Internacional'],
+      icono: '📊', dims: ['DIM-01', 'DIM-03'], duracion: '5 años',
+      descripcion: 'Formación en gestión empresarial, finanzas, economía y comercio internacional.',
+      carreras: ['Economía', 'Administración de Empresas', 'Contabilidad', 'Negocios Internacionales'],
+      campoLaboral: ['Banca', 'Empresas privadas', 'Consultoría', 'Gobierno', 'Comercio exterior'],
+      especializaciones: ['Finanzas', 'Marketing', 'Recursos Humanos', 'Auditoría', 'Comercio internacional'],
       instituciones: ['UNMSM', 'UP (Pacífico)', 'UPC', 'ESAN', 'USIL'],
       sueldoJunior: 'S/ 2,000 – 3,500',
       sueldoSenior: 'S/ 6,000 – 15,000',
-      costoNacional: 'Matrícula S/ 50 – 150 | Ciclo S/ 0 (gratuita)',
+      costoNacional: 'Matrícula S/ 50 – 150 | Ciclo gratuito',
       costoPrivada: 'Matrícula S/ 800 – 2,500 | Ciclo S/ 5,000 – 11,000'
     },
+    {
+      categoria: 'UNIVERSITARIA', subcategoria: 'Humanidades y Artes',
+      icono: '🎨', dims: ['DIM-01', 'DIM-04'], duracion: '5 años',
+      descripcion: 'Carreras creativas y humanísticas orientadas a la cultura, el diseño, la filosofía y la expresión artística.',
+      carreras: ['Arquitectura', 'Diseño Gráfico', 'Literatura', 'Filosofía', 'Historia'],
+      campoLaboral: ['Cultura y artes', 'Diseño', 'Medios', 'Investigación', 'Docencia universitaria'],
+      especializaciones: ['Diseño UX/UI', 'Arquitectura sostenible', 'Gestión cultural', 'Edición literaria'],
+      instituciones: ['PUCP', 'UNMSM', 'UPC', 'Corriente Alterna', 'ENSABAP'],
+      sueldoJunior: 'S/ 1,500 – 3,000',
+      sueldoSenior: 'S/ 4,000 – 10,000',
+      costoNacional: 'Matrícula S/ 50 – 150 | Ciclo gratuito',
+      costoPrivada: 'Matrícula S/ 600 – 1,500 | Ciclo S/ 3,000 – 7,000'
+    },
 
-    // ── TÉCNICA — Tecnología ──
+    // ── TÉCNICA ───────────────────────────────────────────
     {
       categoria: 'TECNICA', subcategoria: 'Tecnología',
-      nombre: 'Desarrollo de Software', icono: '🖥️',
-      dims: ['DIM-02', 'DIM-03'], duracion: '3 años',
-      descripcion: 'Crea aplicaciones, páginas web y sistemas digitales. Alta empleabilidad y posibilidad de trabajo remoto.',
-      campoLaboral: ['Empresas TI', 'Freelance', 'Startups', 'Banca', 'E-commerce'],
-      especializaciones: ['Frontend', 'Backend', 'Mobile', 'Base de datos', 'QA Testing'],
+      icono: '🖥️', dims: ['DIM-02', 'DIM-03'], duracion: '2-3 años',
+      descripcion: 'Formación técnica en desarrollo de software, redes y seguridad informática. Alta empleabilidad.',
+      carreras: ['Desarrollo de Software', 'Redes y Comunicaciones', 'Ciberseguridad', 'Soporte Técnico'],
+      campoLaboral: ['Empresas TI', 'Freelance', 'Startups', 'Banca', 'ISPs'],
+      especializaciones: ['Frontend', 'Backend', 'DevOps', 'Cisco CCNA', 'Cloud Computing'],
       instituciones: ['SENATI', 'Cibertec', 'Tecsup', 'ISIL', 'Zegel'],
-      sueldoJunior: 'S/ 1,800 – 3,500',
-      sueldoSenior: 'S/ 6,000 – 14,000',
-      costoNacional: 'Matrícula S/ 200 – 500 | Ciclo S/ 1,500 – 2,500',
-      costoPrivada: 'Matrícula S/ 500 – 1,200 | Ciclo S/ 2,500 – 4,500'
-    },
-    {
-      categoria: 'TECNICA', subcategoria: 'Tecnología',
-      nombre: 'Redes y Comunicaciones', icono: '🌐',
-      dims: ['DIM-02', 'DIM-03'], duracion: '3 años',
-      descripcion: 'Instala, configura y administra redes de datos e infraestructura de telecomunicaciones.',
-      campoLaboral: ['Telecomunicaciones', 'Empresas TI', 'ISPs', 'Bancos', 'Instituciones públicas'],
-      especializaciones: ['Cisco CCNA', 'Ciberseguridad', 'Cloud Computing', 'Fibra óptica'],
-      instituciones: ['SENATI', 'Cibertec', 'Tecsup', 'IDAT'],
-      sueldoJunior: 'S/ 1,500 – 2,800',
-      sueldoSenior: 'S/ 5,000 – 10,000',
-      costoNacional: 'Matrícula S/ 200 – 400 | Ciclo S/ 1,200 – 2,000',
-      costoPrivada: 'Matrícula S/ 400 – 1,000 | Ciclo S/ 2,000 – 3,500'
+      sueldoJunior: 'S/ 1,500 – 3,500',
+      sueldoSenior: 'S/ 5,000 – 14,000',
+      costoNacional: 'Matrícula S/ 200 – 500 | Ciclo S/ 1,200 – 2,500',
+      costoPrivada: 'Matrícula S/ 400 – 1,000 | Ciclo S/ 2,000 – 4,500'
     },
     {
       categoria: 'TECNICA', subcategoria: 'Industrial y Mecánica',
-      nombre: 'Mecánica Automotriz', icono: '🚗',
-      dims: ['DIM-02'], duracion: '3 años',
-      descripcion: 'Diagnostica, repara y mantiene vehículos modernos con tecnología electrónica y mecánica avanzada.',
-      campoLaboral: ['Talleres mecánicos', 'Concesionarias', 'Manufactura', 'Minería', 'Transporte'],
-      especializaciones: ['Electrónica automotriz', 'Sistemas de transmisión', 'Frenos y suspensión'],
-      instituciones: ['SENATI', 'Tecsup', 'SENCICO', 'CEPEA'],
-      sueldoJunior: 'S/ 1,200 – 2,000',
-      sueldoSenior: 'S/ 3,500 – 7,000',
-      costoNacional: 'Matrícula S/ 150 – 300 | Ciclo S/ 800 – 1,500',
-      costoPrivada: 'Matrícula S/ 300 – 700 | Ciclo S/ 1,500 – 2,500'
-    },
-    {
-      categoria: 'TECNICA', subcategoria: 'Industrial y Mecánica',
-      nombre: 'Electricidad Industrial', icono: '⚡',
-      dims: ['DIM-02'], duracion: '2 años',
-      descripcion: 'Instala y mantiene sistemas eléctricos en industrias, plantas y edificios con alta demanda laboral.',
-      campoLaboral: ['Industria', 'Construcción', 'Minería', 'Generación eléctrica', 'Mantenimiento'],
-      especializaciones: ['Automatización', 'PLC', 'Alta tensión', 'Energías renovables'],
+      icono: '🔧', dims: ['DIM-02'], duracion: '2-3 años',
+      descripcion: 'Formación práctica en mecánica, electricidad y mantenimiento industrial. Alta demanda en minería y manufactura.',
+      carreras: ['Mecánica Automotriz', 'Electricidad Industrial', 'Soldadura', 'Mantenimiento Industrial'],
+      campoLaboral: ['Industria', 'Minería', 'Manufactura', 'Construcción', 'Transporte'],
+      especializaciones: ['Electrónica automotriz', 'PLC y automatización', 'Energías renovables', 'Alta tensión'],
       instituciones: ['SENATI', 'Tecsup', 'SENCICO', 'CFP'],
-      sueldoJunior: 'S/ 1,200 – 2,000',
-      sueldoSenior: 'S/ 3,500 – 7,500',
-      costoNacional: 'Matrícula S/ 100 – 250 | Ciclo S/ 700 – 1,200',
-      costoPrivada: 'Matrícula S/ 250 – 500 | Ciclo S/ 1,200 – 2,000'
+      sueldoJunior: 'S/ 1,200 – 2,200',
+      sueldoSenior: 'S/ 3,500 – 8,000',
+      costoNacional: 'Matrícula S/ 100 – 300 | Ciclo S/ 700 – 1,500',
+      costoPrivada: 'Matrícula S/ 250 – 600 | Ciclo S/ 1,200 – 2,500'
     },
     {
       categoria: 'TECNICA', subcategoria: 'Salud Técnica',
-      nombre: 'Enfermería Técnica', icono: '🏥',
-      dims: ['DIM-02', 'DIM-04'], duracion: '3 años',
-      descripcion: 'Brinda cuidados de salud a pacientes bajo supervisión médica en hospitales, clínicas y postas.',
-      campoLaboral: ['Hospitales', 'Clínicas privadas', 'Farmacias', 'Centros de salud', 'Atención domiciliaria'],
-      especializaciones: ['Enfermería pediátrica', 'Emergencias', 'Cuidados intensivos'],
+      icono: '🏥', dims: ['DIM-02', 'DIM-04'], duracion: '3 años',
+      descripcion: 'Formación técnica en salud para apoyar a profesionales médicos en hospitales, clínicas y farmacias.',
+      carreras: ['Enfermería Técnica', 'Laboratorio Clínico', 'Farmacia', 'Prótesis Dental'],
+      campoLaboral: ['Hospitales', 'Clínicas', 'Farmacias', 'Laboratorios', 'Centros de salud'],
+      especializaciones: ['Cuidados intensivos', 'Análisis clínicos', 'Farmacología', 'Odontología técnica'],
       instituciones: ['Institutos tecnológicos públicos', 'SIAT', 'Privados acreditados'],
       sueldoJunior: 'S/ 1,200 – 2,000',
-      sueldoSenior: 'S/ 2,500 – 4,500',
+      sueldoSenior: 'S/ 2,500 – 5,000',
       costoNacional: 'Matrícula S/ 100 – 300 | Ciclo S/ 800 – 1,500',
       costoPrivada: 'Matrícula S/ 400 – 800 | Ciclo S/ 1,500 – 2,800'
     },
+    {
+      categoria: 'TECNICA', subcategoria: 'Administración y Comercio',
+      icono: '📋', dims: ['DIM-02'], duracion: '2-3 años',
+      descripcion: 'Formación técnica en gestión empresarial, contabilidad y marketing digital.',
+      carreras: ['Contabilidad Técnica', 'Administración Bancaria', 'Marketing Digital'],
+      campoLaboral: ['Bancos', 'Retail', 'Empresas', 'Emprendimiento', 'Sector público'],
+      especializaciones: ['Contabilidad digital', 'Banca y finanzas', 'E-commerce', 'Community management'],
+      instituciones: ['ISIL', 'Cibertec', 'IPP', 'Zegel', 'SISE'],
+      sueldoJunior: 'S/ 1,200 – 2,200',
+      sueldoSenior: 'S/ 3,000 – 6,000',
+      costoNacional: 'Matrícula S/ 100 – 300 | Ciclo S/ 800 – 1,500',
+      costoPrivada: 'Matrícula S/ 300 – 700 | Ciclo S/ 1,200 – 2,500'
+    },
 
-    // ── FUERZAS ARMADAS ──
+    // ── FUERZAS ARMADAS ───────────────────────────────────
     {
       categoria: 'FUERZAS_ARMADAS', subcategoria: 'Ejército',
-      nombre: 'Oficial del Ejército del Perú', icono: '🎖️',
-      dims: ['DIM-05', 'DIM-06'], duracion: '4 años',
-      descripcion: 'Lidera unidades militares en operaciones de defensa nacional, gestión de emergencias y misiones de paz.',
+      icono: '🎖️', dims: ['DIM-05', 'DIM-06'], duracion: '3-5 años',
+      descripcion: 'Formación como Oficial o Suboficial del Ejército del Perú. Defensa nacional y gestión de emergencias.',
+      carreras: ['Oficial del Ejército del Perú', 'Suboficial del Ejército del Perú'],
       campoLaboral: ['Defensa nacional', 'Logística militar', 'Inteligencia', 'Misiones ONU', 'Gestión de desastres'],
       especializaciones: ['Infantería', 'Artillería', 'Inteligencia militar', 'Ingeniería militar'],
       instituciones: ['Escuela Militar de Chorrillos', 'IESTPE', 'CAEN'],
@@ -473,9 +417,9 @@ const VocaData = (() => {
     },
     {
       categoria: 'FUERZAS_ARMADAS', subcategoria: 'Marina',
-      nombre: 'Oficial de la Marina de Guerra', icono: '⚓',
-      dims: ['DIM-05', 'DIM-06'], duracion: '5 años',
-      descripcion: 'Protege las fronteras marítimas del Perú y participa en operaciones navales, guardacostas y misiones internacionales.',
+      icono: '⚓', dims: ['DIM-05', 'DIM-06'], duracion: '3-5 años',
+      descripcion: 'Formación como Oficial o Suboficial de la Marina de Guerra del Perú. Protección marítima y lacustre.',
+      carreras: ['Oficial de la Marina de Guerra', 'Suboficial de la Marina de Guerra'],
       campoLaboral: ['Defensa marítima', 'Operaciones navales', 'Guardacostas', 'Puertos', 'Misiones ONU'],
       especializaciones: ['Navegación', 'Ingeniería naval', 'Infantería de Marina', 'Inteligencia naval'],
       instituciones: ['Escuela Naval del Perú', 'CITEN'],
@@ -486,9 +430,9 @@ const VocaData = (() => {
     },
     {
       categoria: 'FUERZAS_ARMADAS', subcategoria: 'Fuerza Aérea',
-      nombre: 'Oficial de la FAP', icono: '✈️',
-      dims: ['DIM-05', 'DIM-06'], duracion: '4 años',
-      descripcion: 'Protege el espacio aéreo peruano y opera aeronaves militares en misiones de defensa y apoyo humanitario.',
+      icono: '✈️', dims: ['DIM-05', 'DIM-06'], duracion: '3-5 años',
+      descripcion: 'Formación como Oficial o Suboficial de la Fuerza Aérea del Perú. Protección del espacio aéreo.',
+      carreras: ['Oficial de la FAP', 'Suboficial de la FAP'],
       campoLaboral: ['Aviación militar', 'Defensa aérea', 'Logística aérea', 'Rescate y emergencias'],
       especializaciones: ['Piloto militar', 'Control aéreo', 'Mantenimiento aeronáutico', 'Inteligencia aérea'],
       instituciones: ['Escuela de Oficiales FAP', 'ESOFA', 'EMGFA'],
@@ -498,12 +442,12 @@ const VocaData = (() => {
       costoPrivada: 'N/A — institución estatal'
     },
 
-    // ── POLICIAL ──
+    // ── POLICIAL ──────────────────────────────────────────
     {
       categoria: 'POLICIAL', subcategoria: 'Oficiales PNP',
-      nombre: 'Oficial de la PNP', icono: '👮',
-      dims: ['DIM-04', 'DIM-05', 'DIM-06'], duracion: '5 años',
+      icono: '👮', dims: ['DIM-04', 'DIM-05', 'DIM-06'], duracion: '5 años',
       descripcion: 'Lidera unidades policiales para garantizar la seguridad ciudadana, investigar delitos y mantener el orden público.',
+      carreras: ['Oficial de la Policía Nacional del Perú'],
       campoLaboral: ['Seguridad ciudadana', 'Investigación criminal', 'Orden público', 'Lucha contra el crimen organizado'],
       especializaciones: ['Investigación criminal', 'Orden público', 'Inteligencia policial', 'Tránsito'],
       instituciones: ['Escuela de Oficiales PNP (EO-PNP)'],
@@ -514,9 +458,9 @@ const VocaData = (() => {
     },
     {
       categoria: 'POLICIAL', subcategoria: 'Suboficiales PNP',
-      nombre: 'Suboficial de la PNP', icono: '🚔',
-      dims: ['DIM-04', 'DIM-05', 'DIM-06'], duracion: '3 años',
+      icono: '🚔', dims: ['DIM-04', 'DIM-05', 'DIM-06'], duracion: '3 años',
       descripcion: 'Ejecuta operaciones de patrullaje, control de tránsito y seguridad comunitaria en contacto directo con la ciudadanía.',
+      carreras: ['Suboficial de la Policía Nacional del Perú'],
       campoLaboral: ['Patrullaje urbano', 'Control de tránsito', 'Seguridad comunitaria', 'Protección de instalaciones'],
       especializaciones: ['Patrullaje', 'Tránsito', 'Criminalística', 'Protección de personas'],
       instituciones: ['Escuelas Técnico Superiores PNP (ETS-PNP)'],
@@ -537,6 +481,45 @@ const VocaData = (() => {
     'DIM-04': 'UNIVERSITARIA_SOCIAL',
     'DIM-05': 'FUERZAS_ARMADAS',
     'DIM-06': 'FUERZAS_ARMADAS'
+  };
+
+  /* ============================================================
+     SUBCATEGORÍAS VÁLIDAS POR CATEGORÍA RESULTANTE
+     Fuente: definición del cliente en base al Excel
+     Controla qué subcategorías del catálogo se muestran
+     para cada resultado de las reglas R-001 a R-010
+  ============================================================ */
+  const SUBCATS_POR_CATEGORIA = {
+    'UNIVERSITARIA': [
+      'Ciencias e Ingeniería', 'Ciencias de la Salud',
+      'Ciencias Sociales', 'Ciencias Económicas', 'Humanidades y Artes'
+    ],
+    'TECNICA': [
+      'Tecnología', 'Industrial y Mecánica',
+      'Salud Técnica', 'Administración y Comercio'
+    ],
+    'FUERZAS_ARMADAS': [
+      'Ejército', 'Marina', 'Fuerza Aérea'
+    ],
+    'POLICIAL': [
+      'Oficiales PNP', 'Suboficiales PNP'
+    ],
+    'UNIVERSITARIA_TECNICA': [
+      'Ciencias e Ingeniería', 'Ciencias de la Salud',
+      'Ciencias Sociales', 'Ciencias Económicas', 'Humanidades y Artes',
+      'Tecnología', 'Industrial y Mecánica',
+      'Salud Técnica', 'Administración y Comercio'
+    ],
+    'UNIVERSITARIA_SOCIAL': [
+      'Ciencias Sociales', 'Ciencias Económicas', 'Humanidades y Artes'
+    ],
+    'UNIVERSITARIA_CIENCIAS': [
+      'Ciencias e Ingeniería', 'Ciencias de la Salud'
+    ],
+    // Para MÚLTIPLE, INDETERMINADO y DEFAULT → todas las subcategorías
+    'MULTIPLE':      null,
+    'INDETERMINADO': null,
+    'DEFAULT':       null
   };
 
   /* ============================================================
@@ -569,6 +552,11 @@ const VocaData = (() => {
     getCatalogo:          () => [...CATALOGO],
     getCatalogoPorCategoria: (cat) => CATALOGO.filter(c => c.categoria === cat),
     getMapeoDefault:      () => ({ ...MAPEO_DEFAULT }),
+    getSubcatsPorCategoria: (cat) => SUBCATS_POR_CATEGORIA[cat] || null,
+    getCatalogoPorSubcats: (subcats) => {
+      if (!subcats) return [...CATALOGO];
+      return CATALOGO.filter(c => subcats.includes(c.subcategoria));
+    },
     getEtiquetaCategoria: (cat) => ETIQUETAS_CATEGORIA[cat] || ETIQUETAS_CATEGORIA['DEFAULT'],
     getTotalItems:        () => ITEMS.length,
     VERSION: '1.0.0'

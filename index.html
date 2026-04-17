@@ -293,10 +293,7 @@
     <p id="p6-mensaje" class="p6-mensaje"></p>
     <p class="sec-title">Carreras recomendadas para ti</p>
     <div class="carreras-list" id="carreras-resumen"></div>
-    <div class="warn-box">
-      <span style="font-size:18px;flex-shrink:0">⚠️</span>
-      <p>Este resultado es orientativo y no reemplaza la orientación vocacional presencial con un psicólogo.</p>
-    </div>
+
     <div class="p6-actions">
       <button class="btn btn-lime" onclick="VocaExport.descargarPDF()">📄 Descargar PDF</button>
       <button class="btn btn-secondary" onclick="VocaApp.nuevaEvaluacion()">Nueva evaluación</button>
@@ -676,7 +673,23 @@ document.getElementById('modal-admin')?.addEventListener('click', function(e) {
   if (e.target === this) cerrarModalAdmin();
 });
 
-// Pantalla 6 — expandir ficha de carrera
+// Pantalla 6 — expandir subcategoría
+function toggleSubcatP6(detailId, hdrEl) {
+  const det = document.getElementById(detailId);
+  const caret = hdrEl ? hdrEl.querySelector('.subcat-caret') : null;
+  if (!det) return;
+  const isOpen = det.style.display === 'block';
+  // Cerrar todos
+  document.querySelectorAll('[id^="sc-detail-p6-"]').forEach(d => d.style.display = 'none');
+  document.querySelectorAll('.subcat-caret').forEach(c => c.textContent = '▼');
+  // Abrir este si estaba cerrado
+  if (!isOpen) {
+    det.style.display = 'block';
+    if (caret) caret.textContent = '▲';
+  }
+}
+
+// Pantalla 6 — expandir ficha de carrera (legacy, mantener por P7)
 function toggleCarreraP6(detailId, cardId) {
   const det = document.getElementById(detailId);
   const arr = document.getElementById('arr-' + detailId);
@@ -762,93 +775,63 @@ function renderCarrerasPorCategoria() {
   const r = VocaApp.getResultado();
   if (!r) return;
 
-  const cats = { univ:'UNIVERSITARIA', tec:'TECNICA', ffaa:'FUERZAS_ARMADAS', pol:'POLICIAL' };
+  const tabs = { univ:'UNIVERSITARIA', tec:'TECNICA', ffaa:'FUERZAS_ARMADAS', pol:'POLICIAL' };
 
-  Object.entries(cats).forEach(([tab, cat]) => {
+  Object.entries(tabs).forEach(([tab, cat]) => {
     const panel = document.getElementById('t7-' + tab);
     if (!panel) return;
 
-    const carreras = VocaData.getCatalogoPorCategoria(cat).map(c => {
-      const puntajesDims = c.dims.map(d => r.puntajesNorm[d] || 0);
+    const subcatNames = VocaData.getSubcatsPorCategoria(cat);
+    const subcats = VocaData.getCatalogoPorSubcats(subcatNames).map(sc => {
+      const puntajesDims = sc.dims.map(d => r.puntajesNorm[d] || 0);
       const afinidad = Math.round(puntajesDims.reduce((a,b)=>a+b,0) / puntajesDims.length);
-      return { ...c, afinidad };
+      return { ...sc, afinidad };
     }).sort((a,b) => b.afinidad - a.afinidad);
 
-    if (!carreras.length) {
-      panel.innerHTML = `<div class="empty-state"><div class="empty-ico">💡</div><p>No hay opciones en esta categoría para tu perfil actual.</p></div>`;
+    if (!subcats.length) {
+      panel.innerHTML = '<div class="empty-state"><div class="empty-ico">💡</div><p>No hay opciones disponibles.</p></div>';
       return;
     }
 
-    panel.innerHTML = carreras.map(c => `
-      <div class="carrera-card" onclick="toggleCard7(this)">
-        <div class="card-hdr">
-          <div class="card-hdr-ico">${c.icono}</div>
-          <div class="card-hdr-main">
-            <div class="card-hdr-name">${c.nombre}</div>
-            <div class="card-hdr-dur">${c.subcategoria} · ${c.duracion}</div>
-          </div>
-          <span class="card-match" style="background:rgba(200,255,0,0.15);color:#C8FF00;border:1px solid rgba(200,255,0,0.3)">${c.afinidad}% afín</span>
-        </div>
-        <div class="card-body">
+    const CAT_COLOR = { UNIVERSITARIA:'#A855F7', TECNICA:'#22C55E', FUERZAS_ARMADAS:'#F59E0B', POLICIAL:'#EC4899' };
 
-          ${c.descripcion ? `<p class="card-desc">${c.descripcion}</p>` : ''}
-
-          <div class="match-bar-wrap">
-            <div class="match-bar-lbl"><span>Afinidad con tu perfil</span><span style="color:var(--lime);font-weight:900">${c.afinidad}%</span></div>
-            <div class="match-track2"><div class="match-fill2" style="width:${c.afinidad}%;background:linear-gradient(90deg,var(--purple),var(--lime))"></div></div>
-          </div>
-
-          <div class="ficha-grid">
-            <div class="ficha-bloque" style="border-left:3px solid var(--blue)">
-              <div class="ficha-icono">🏢</div>
-              <div class="ficha-contenido">
-                <div class="campo-lbl">Campo laboral</div>
-                <div class="campo-tags">${(c.campoLaboral||[]).map(cl=>`<span class="campo-tag">${cl}</span>`).join('')}</div>
-              </div>
-            </div>
-
-            ${c.especializaciones ? `
-            <div class="ficha-bloque" style="border-left:3px solid var(--purple)">
-              <div class="ficha-icono">🎯</div>
-              <div class="ficha-contenido">
-                <div class="campo-lbl">Especializaciones</div>
-                <div class="campo-tags">${c.especializaciones.map(e=>`<span class="campo-tag" style="background:var(--purple-bg);color:var(--purple-mid)">${e}</span>`).join('')}</div>
-              </div>
-            </div>` : ''}
-
-            ${c.sueldoJunior ? `
-            <div class="ficha-bloque" style="border-left:3px solid #44FF88">
-              <div class="ficha-icono">💰</div>
-              <div class="ficha-contenido">
-                <div class="campo-lbl">Sueldo referencial</div>
-                <div class="sueldo-row"><span class="sueldo-lbl">Junior:</span><span class="sueldo-val">${c.sueldoJunior}</span></div>
-                <div class="sueldo-row"><span class="sueldo-lbl">Senior:</span><span class="sueldo-val sueldo-senior">${c.sueldoSenior}</span></div>
-              </div>
-            </div>` : ''}
-
-            <div class="ficha-bloque" style="border-left:3px solid var(--orange)">
-              <div class="ficha-icono">🎓</div>
-              <div class="ficha-contenido">
-                <div class="campo-lbl">Instituciones en Perú</div>
-                <div class="inst-list">${(c.instituciones||[]).map(i=>`<span class="inst-pill">${i}</span>`).join('')}</div>
-              </div>
-            </div>
-
-            ${c.costoNacional ? `
-            <div class="ficha-bloque" style="border-left:3px solid var(--pink)">
-              <div class="ficha-icono">💳</div>
-              <div class="ficha-contenido">
-                <div class="campo-lbl">Costos y financiamiento</div>
-                <div class="costo-row"><span class="costo-tipo">Nacional:</span> ${c.costoNacional}</div>
-                <div class="costo-row"><span class="costo-tipo">Privada:</span> ${c.costoPrivada}</div>
-              </div>
-            </div>` : ''}
-          </div>
-
-        </div>
-      </div>`).join('');
+    panel.innerHTML = subcats.map((sc, idx) => {
+      const color = CAT_COLOR[sc.categoria] || '#A855F7';
+      const bodyId = 't7-body-' + tab + '-' + idx;
+      return '<div class="carrera-card">' +
+        '<div class="card-hdr" onclick="document.getElementById(\'' + bodyId + '\').classList.toggle(\'open\')" style="cursor:pointer">' +
+          '<div class="card-hdr-ico" style="background:rgba(255,255,255,0.05)">' + sc.icono + '</div>' +
+          '<div class="card-hdr-main">' +
+            '<div class="card-hdr-name">' + sc.subcategoria + '</div>' +
+            '<div class="card-hdr-dur">' + (sc.carreras||[]).length + ' carrera(s) · ' + sc.duracion + '</div>' +
+          '</div>' +
+          '<span class="card-match" style="background:rgba(200,255,0,0.12);color:#C8FF00;border:1px solid rgba(200,255,0,0.25)">' + sc.afinidad + '% afín</span>' +
+        '</div>' +
+        '<div class="card-body ' + (idx===0?'open':'') + '" id="' + bodyId + '">' +
+          '<div style="margin-bottom:10px">' +
+            '<div class="campo-lbl" style="margin-bottom:5px">Carreras incluidas</div>' +
+            '<div style="display:flex;flex-wrap:wrap;gap:4px">' +
+              (sc.carreras||[]).map(c => '<span style="font-size:11px;padding:3px 9px;background:rgba(255,255,255,0.06);color:var(--text-2);border-radius:6px;border:1px solid var(--border)">' + c + '</span>').join('') +
+            '</div>' +
+          '</div>' +
+          (sc.descripcion ? '<p class="card-desc">' + sc.descripcion + '</p>' : '') +
+          '<div class="match-bar-wrap">' +
+            '<div class="match-bar-lbl"><span>Afinidad con tu perfil</span><span style="color:' + color + ';font-weight:900">' + sc.afinidad + '%</span></div>' +
+            '<div class="match-track2"><div class="match-fill2" style="width:' + sc.afinidad + '%;background:' + color + '"></div></div>' +
+          '</div>' +
+          '<div class="ficha-grid">' +
+            (sc.campoLaboral?.length ? '<div class="ficha-bloque" style="border-left:3px solid var(--blue)"><div class="ficha-icono">🏢</div><div class="ficha-contenido"><div class="campo-lbl">Campo laboral</div><div class="campo-tags">' + sc.campoLaboral.map(cl=>'<span class="campo-tag">'+cl+'</span>').join('') + '</div></div></div>' : '') +
+            (sc.especializaciones?.length ? '<div class="ficha-bloque" style="border-left:3px solid var(--purple)"><div class="ficha-icono">🎯</div><div class="ficha-contenido"><div class="campo-lbl">Especializaciones</div><div class="campo-tags">' + sc.especializaciones.map(e=>'<span class="campo-tag" style="background:var(--purple-bg);color:var(--purple-mid)">'+e+'</span>').join('') + '</div></div></div>' : '') +
+            (sc.sueldoJunior ? '<div class="ficha-bloque" style="border-left:3px solid #44FF88"><div class="ficha-icono">💰</div><div class="ficha-contenido"><div class="campo-lbl">Sueldo referencial</div><div class="sueldo-row"><span class="sueldo-lbl">Junior:</span><span class="sueldo-val">' + sc.sueldoJunior + '</span></div><div class="sueldo-row"><span class="sueldo-lbl">Senior:</span><span class="sueldo-val sueldo-senior">' + sc.sueldoSenior + '</span></div></div></div>' : '') +
+            (sc.instituciones?.length ? '<div class="ficha-bloque" style="border-left:3px solid var(--orange)"><div class="ficha-icono">🎓</div><div class="ficha-contenido"><div class="campo-lbl">Instituciones en Perú</div><div class="inst-list">' + sc.instituciones.map(i=>'<span class="inst-pill">'+i+'</span>').join('') + '</div></div></div>' : '') +
+            (sc.costoNacional ? '<div class="ficha-bloque" style="border-left:3px solid var(--pink)"><div class="ficha-icono">💳</div><div class="ficha-contenido"><div class="campo-lbl">Costos y financiamiento</div><div class="costo-row"><span class="costo-tipo">Nacional:</span> ' + sc.costoNacional + '</div><div class="costo-row"><span class="costo-tipo">Privada:</span> ' + (sc.costoPrivada||'') + '</div></div></div>' : '') +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
   });
 }
+
 
 // Hook: renderizar carreras cuando se entra a P7
 const _origIrA = VocaApp.irA;
